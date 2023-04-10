@@ -44,13 +44,15 @@ function App() {
           <Link to={'/'} className='rounded-btn bg-light-purple bold'>submit a track</Link>
         </section>
 
-        <section className='flex' style={{ padding: '20px 25px' }}>
-          <div className='flex font-family' style={{ margin: '3em 5em', maxWidth: '50%' }}>
+        <section className='flex-center' style={{ padding: '20px 25px' }}>
+          <div className='flex font-family' style={{ margin: '3em 5em', maxWidth: '900px' }}>
             <div>
-              <h1 style={{ fontSize: '80px', fontWeight: 800, textAlign: 'left' }}>The Music Industry is Broken.</h1>
+              <h1 style={{ fontSize: '80px', fontWeight: 800, textAlign: 'left', letterSpacing: '-2.5px' }}>The Music Industry is Broken.</h1>
               <p className='txt-light bold' style={{ fontSize: '26px' }}>Here is how we are fixing it by putting <span className='txt-gradient' style={{ backgroundImage: 'linear-gradient(135deg, #FFCC33 0%, #E233FF 100%)' }}>artists first.</span></p>
             </div>
-            <img src={flaskImg} alt='cool flask' style={{ width: 'min(100%, 700px)', objectFit: 'contain' }} />
+            <div style={{ display: 'flex' }}>
+              <img src={flaskImg} alt='cool flask' style={{ width: 'min(100%, 700px)', objectFit: 'contain' }} />
+            </div>
           </div>
         </section>
 
