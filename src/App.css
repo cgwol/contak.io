@@ -19,6 +19,7 @@ body {
   color: var(--font-color);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 h1,
@@ -54,6 +55,13 @@ a:hover {
   text-align: center;
 }
 
+.circle-icon {
+  font-size: 25px;
+  background-color: black;
+  border-radius: 100%;
+  padding: 0.65em;
+}
+
 .flex {
   display: flex;
 }
@@ -87,6 +95,22 @@ a:hover {
   border-radius: 100px;
   margin: 10px 0;
   padding: 12px 20px;
+}
+
+.rounded-card {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  padding: 2em 1em;
+}
+
+.blurry-pink {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #04062B;
+  background: repeating-radial-gradient(ellipse farthest-side at top right, #04062B 0%, #6417B0 25%, #E339A4 50%, #1B0630 75%);
+  filter: blur(10px);
 }
 
 .bold {
