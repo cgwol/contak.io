@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet, Link } from "react-router-dom";
 import './App.css';
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
           <div className="dropdown">
             <button className="login">Login</button>
             <div className="dropdown-content">
-              <a href="#">Member</a>
+              <Link to={`memberLogin`}>Member</Link>
               <a href="#">Creator</a>
               <a href="#">Artist</a>
             </div>
