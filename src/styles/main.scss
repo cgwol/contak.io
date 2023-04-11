@@ -1,0 +1,137 @@
+@use './colors.scss' as *;
+@use './fontSizes.scss' as *;
+@use './gradients.scss' as *;
+@use './borderRadius.scss' as *;
+
+:root {
+
+    @each $color,
+    $shades in $colors {
+
+        @each $shade,
+        $value in $shades {
+            --#{$color}-#{$shade}: #{$value};
+        }
+    }
+
+    @each $size,
+    $value in $font-sizes {
+        --fs-#{$size}: #{$value};
+    }
+
+    @each $type,
+    $values in $gradients {
+
+        @each $name,
+        $gradient in $values {
+            --#{$type}-gradient-#{$name}: #{$gradient};
+        }
+    }
+
+    @each $scale,
+    $value in $border-radius {
+        --br-#{$scale}: #{$value};
+    }
+
+    --font-family: 'Inter',
+    'Helvetica',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'NotoColorEmoji',
+    'Noto Color Emoji',
+    'Segoe UI Symbol',
+    'Android Emoji, EmojiSymbols',
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'Segoe UI',
+    'Roboto',
+    'Helvetica Neue',
+    'Noto Sans',
+    sans-serif;
+}
+
+@each $color,
+$shades in $colors {
+
+    @each $shade,
+    $value in $shades {
+        .bg-#{$color}-#{$shade} {
+            background-color: var(--#{$color}-#{$shade}) !important;
+        }
+
+        .txt-#{$color}-#{$shade} {
+            color: var(--#{$color}-#{$shade}) !important;
+        }
+    }
+}
+
+@each $size,
+$value in $font-sizes {
+    .fs-#{$size} {
+        font-size: var(--fs-#{$size}) !important;
+    }
+}
+
+@for $i from 1 through 8 {
+    $value: $i*100;
+
+    .fw-#{$value} {
+        font-weight: $value !important;
+    }
+}
+
+@each $type,
+$values in $gradients {
+
+    @each $name,
+    $gradient in $values {
+        .bg-#{$type}-gradient-#{$name} {
+            background-image: var(--#{$type}-gradient-#{$name}) !important;
+        }
+    }
+}
+
+@each $scale,
+$value in $border-radius {
+    .br-#{$scale} {
+        border-radius: var(--br-#{$scale}) !important;
+    }
+}
+
+
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.font-family {
+    font-family: var(--font-family);
+}
+
+
+.txt-gradient {
+    background-clip: text;
+    color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bold {
+    font-weight: 700 !important;
+}
+
+
+.grid {
+    display: grid;
+}
