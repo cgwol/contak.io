@@ -1,0 +1,27 @@
+@use 'sass:map';
+@use 'sass:string';
+
+
+// Map from property names to values
+$custom-properties: (
+);
+
+@function could-be-invalid($str) {
+    @return type-of($str)=='string' and string.index($str, "$");
+}
+
+@mixin define-custom-property($name, $value) {
+    @if map.has-key($custom-properties, $name) {
+        @error "Already defined custom property '#{$name}'";
+    }
+
+    @if could-be-invalid($name) {
+        @warn "Make sure this name is correct '#{$name}'";
+    }
+
+    @if could-be-invalid($value) {
+        @warn "Make sure this value for #{$name} is correct '#{$value}'";
+    }
+
+    $custom-properties: map.set($custom-properties, $name, $value) !global;
+}

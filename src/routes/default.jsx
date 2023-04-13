@@ -1,36 +1,17 @@
-import React from 'react';
-import { Outlet, Link } from "react-router-dom";
-import './styles/App.scss';
-import contakLogo from './images/Contak_logotype.png';
-import backgroundImg from './images/cool_man.jpeg';
-import flaskImg from './images/cool_flask.png';
-import diamondImg from './images/diamond.png';
+import { faArrowRight, faHand, faMoneyBill, faPaintBrush, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faHand, faArrowRight, faPaintBrush, faMoneyBill, faUser } from '@fortawesome/free-solid-svg-icons';
+import { Link } from "react-router-dom";
+import Navbar from '../components/navbar';
+import flaskImg from '../images/cool_flask.png';
+import backgroundImg from '../images/cool_man.jpeg';
+import diamondImg from '../images/diamond.png';
+import '../styles/routes/App.scss';
 
-function App() {
+
+function Default() {
   return (
     <div className="App">
-
-      <div className="banner">
-        <div className="banner-left">
-          <img src={contakLogo} alt="Contak" style={{ height: '42px', maxHeight: '3rem' }} />
-        </div>
-        <div className="banner-right">
-          <button className="basic-btn">View Plans</button>
-          <div className="dropdown">
-            <button className="basic-btn">Login</button>
-            <div className="dropdown-content">
-              <Link to={`memberLogin`}>Member</Link>
-              <a href="#">Creator</a>
-              <a href="#">Artist</a>
-            </div>
-          </div>
-          <button className="basic-btn">Sign Up</button>
-        </div>
-      </div>
-
-
+      <Navbar />
       <div className="App-body">
         <section className='flex-center flex-column' style={{ minHeight: '100vh', backgroundColor: 'rgba(0,0,0,0.65)' }}>
           <img src={backgroundImg} alt="Man on bed" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: -1, objectFit: 'cover', objectPosition: 'center' }} />
@@ -166,4 +147,4 @@ function App() {
   );
 }
 
-export default App;
+export default Default;

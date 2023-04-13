@@ -1,3 +1,5 @@
+@use './config.scss';
+
 $border-radius: (
     100: 5px,
     200: 10px,
@@ -5,3 +7,18 @@ $border-radius: (
     400: 20px,
     500: 25px
 );
+
+
+@function border-radius-name($scale) {
+    @return br-#{$scale};
+}
+
+@each $scale,
+$value in $border-radius {
+    $name: border-radius-name($scale);
+    @include config.define-custom-property($name, $value);
+
+    .#{$name} {
+        border-radius: var(--#{$name}) !important;
+    }
+}

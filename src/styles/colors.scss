@@ -1,3 +1,5 @@
+@use './config.scss';
+
 $colors: (
     "neutral": (100: #fff,
         200: #d8d8d8,
@@ -7,12 +9,35 @@ $colors: (
         600: #202020,
         700: #181818,
         800: #000000),
-    "green": (100: rgb(35, 207, 164),
+    "green": (100: #23cfa4,
     ),
-    "purple": (100: rgb(94, 93, 240),
+    "purple": (100: #5e5df0,
     ),
     "pink": (100: #ca5dee,
     ),
     "blue": (100: #4BE1EC,
     ),
 );
+
+@function color-name($color, $shade) {
+    @return #{$color}-#{$shade};
+}
+
+@each $color,
+$shades in $colors {
+
+    @each $shade,
+    $value in $shades {
+        $name: color-name($color, $shade);
+        @include config.define-custom-property($name, $value);
+
+        .bg-#{$name} {
+            background-color: var(--#{$name}) !important;
+        }
+
+        .txt-#{$name} {
+            color: var(--#{$name}) !important;
+        }
+
+    }
+}

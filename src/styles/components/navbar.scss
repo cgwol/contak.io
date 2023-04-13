@@ -1,0 +1,47 @@
+@use '../main.scss';
+
+.banner {
+    background-color: var(--neutral-600);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 56px;
+    padding: 0 20px;
+}
+
+.banner-left {
+    display: flex;
+    align-items: center;
+}
+
+.banner-left h1 {
+    color: #fff;
+}
+
+.banner-right {
+    display: flex;
+    align-items: center;
+}
+
+.banner-right button.view-plans,
+.banner-right button.login,
+.banner-right button.signup {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.banner-right button.view-plans:hover,
+.banner-right button.login:hover,
+.banner-right button.signup:hover {
+    text-decoration: underline;
+}
+
+.login-signup {
+    display: flex;
+    align-items: center;
+}

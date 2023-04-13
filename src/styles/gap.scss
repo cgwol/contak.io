@@ -1,0 +1,36 @@
+@use './config.scss';
+
+$gap-sizes: (
+    "xxs": 12px,
+    "xs": 16px,
+    "s": 20px,
+    "m": 26px,
+    "l": 30px,
+    "xl": 56px,
+    "xxl": 80px
+);
+
+@function gap-size-name($size) {
+    @return gap-#{$size};
+}
+
+@each $size,
+$value in $gap-sizes {
+    $name: gap-size-name($size);
+    @include config.define-custom-property($name, $value);
+
+    .#{$name} {
+        gap: var(--#{$name}) !important;
+    }
+}
+
+
+
+@for $i from 1 through 12 {
+    $name: gap-size-name($size);
+    @include config.define-custom-property($name, $value);
+
+    .#{$name} {
+        gap: var(--#{$name}) !important;
+    }
+}

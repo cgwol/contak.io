@@ -1,3 +1,5 @@
+@use './config.scss';
+
 $font-sizes: (
     "xxs": 12px,
     "xs": 16px,
@@ -7,3 +9,17 @@ $font-sizes: (
     "xl": 56px,
     "xxl": 80px
 );
+
+@function font-size-name($size) {
+    @return fs-#{$size};
+}
+
+@each $size,
+$value in $font-sizes {
+    $name: font-size-name($size);
+    @include config.define-custom-property($name, $value);
+
+    .#{$name} {
+        font-size: var(--#{$name}) !important;
+    }
+}

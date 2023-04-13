@@ -1,36 +1,16 @@
-@use './colors.scss' as *;
-@use './fontSizes.scss' as *;
-@use './gradients.scss' as *;
-@use './borderRadius.scss' as *;
+@use './config.scss';
+@use './colors.scss';
+@use './fontSizes.scss';
+@use './gradients.scss';
+@use './borderRadius.scss';
 
+
+// @debug $custom-properties;
 :root {
 
-    @each $color,
-    $shades in $colors {
-
-        @each $shade,
-        $value in $shades {
-            --#{$color}-#{$shade}: #{$value};
-        }
-    }
-
-    @each $size,
-    $value in $font-sizes {
-        --fs-#{$size}: #{$value};
-    }
-
-    @each $type,
-    $values in $gradients {
-
-        @each $name,
-        $gradient in $values {
-            --#{$type}-gradient-#{$name}: #{$gradient};
-        }
-    }
-
-    @each $scale,
-    $value in $border-radius {
-        --br-#{$scale}: #{$value};
+    @each $property,
+    $value in config.$custom-properties {
+        --#{$property}: #{$value};
     }
 
     --font-family: 'Inter',
@@ -50,56 +30,45 @@
     sans-serif;
 }
 
-@each $color,
-$shades in $colors {
 
-    @each $shade,
-    $value in $shades {
-        .bg-#{$color}-#{$shade} {
-            background-color: var(--#{$color}-#{$shade}) !important;
-        }
-
-        .txt-#{$color}-#{$shade} {
-            color: var(--#{$color}-#{$shade}) !important;
-        }
-    }
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-@each $size,
-$value in $font-sizes {
-    .fs-#{$size} {
-        font-size: var(--fs-#{$size}) !important;
-    }
+
+/* Main styles */
+body {
+    background-color: var(--neutral-700);
+    color: var(--neutral-100);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: var(--fs-xs);
 }
 
-@for $i from 1 through 8 {
-    $value: $i*100;
-
-    .fw-#{$value} {
-        font-weight: $value !important;
-    }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: bold;
+    margin: 10px 0;
 }
 
-@each $type,
-$values in $gradients {
-
-    @each $name,
-    $gradient in $values {
-        .bg-#{$type}-gradient-#{$name} {
-            background-image: var(--#{$type}-gradient-#{$name}) !important;
-        }
-    }
+a {
+    color: var(--neutral-100);
+    text-decoration: none;
 }
 
-@each $scale,
-$value in $border-radius {
-    .br-#{$scale} {
-        border-radius: var(--br-#{$scale}) !important;
-    }
+a:hover {
+    text-decoration: underline;
 }
 
 
 
+/* Gloabl Misc Classes */
 .flex {
     display: flex;
 }
@@ -134,4 +103,10 @@ $value in $border-radius {
 
 .grid {
     display: grid;
+}
+
+
+.absolute-fill {
+    position: absolute;
+    inset: 0;
 }

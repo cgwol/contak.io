@@ -1,3 +1,23 @@
+@use './config.scss';
+
 $gradients: (
     "linear": ("orange-to-purple": linear-gradient(135deg, #FFCC33 0%, #E233FF 100%))
 );
+
+@function gradient-name($type, $name) {
+    @return #{$type}-gradient-#{$name};
+}
+
+@each $type,
+$values in $gradients {
+
+    @each $name,
+    $gradient in $values {
+        $prop-name: gradient-name($type, $name);
+        @include config.define-custom-property($prop-name, $gradient);
+
+        .bg-#{$prop-name} {
+            background-image: var(--#{$prop-name}) !important;
+        }
+    }
+}

@@ -4,15 +4,14 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Default from './routes/default';
 import MemberLogin from './routes/memberLogin';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Default />,
   },
   {
     path: "memberLogin",
