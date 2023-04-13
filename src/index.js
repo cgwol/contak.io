@@ -7,6 +7,8 @@ import {
 import reportWebVitals from './reportWebVitals';
 import Default from './routes/default';
 import MemberLogin from './routes/memberLogin';
+import MusicCreator from './routes/profilePage/musicCreator';
+
 
 const router = createBrowserRouter([
   {
@@ -16,6 +18,11 @@ const router = createBrowserRouter([
   {
     path: "memberLogin",
     element: <MemberLogin />
+  },
+  {
+    path: "musicCreator",
+    element: <MusicCreator />,
+    loader: ({params}) => params
   }
 ]);
 

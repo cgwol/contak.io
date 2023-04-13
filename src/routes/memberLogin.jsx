@@ -16,7 +16,8 @@ export default function MemberLogin() {
     return (
         <>
             <Navbar />
-            <form onSubmit={onLogin} className='absolute-fill flex-center flex-column' style={{ gap: '3em' }}>
+
+            <form onSubmit={onLogin} className='absolute-fill isolate flex-center flex-column' style={{ gap: '3em' }}>
                 <h2>Member Login</h2>
                 <div>
                     <label htmlFor={usernameId}>Username:</label>

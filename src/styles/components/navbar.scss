@@ -1,4 +1,5 @@
 @use '../main.scss';
+@use './dropdown.scss';
 
 .banner {
     background-color: var(--neutral-600);
@@ -19,8 +20,9 @@
 }
 
 .banner-right {
-    display: flex;
-    align-items: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
 }
 
 .banner-right button.view-plans,

@@ -110,3 +110,15 @@ a:hover {
     position: absolute;
     inset: 0;
 }
+
+.pos-abs {
+    position: absolute;
+}
+
+.pos-rel {
+    position: relative;
+}
+
+.isolate {
+    isolation: isolate;
+}
