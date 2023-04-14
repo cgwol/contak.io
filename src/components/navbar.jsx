@@ -1,6 +1,6 @@
+import 'Components/navbar.scss';
+import contakLogo from 'Images/Contak_logotype.png';
 import { Link } from "react-router-dom";
-import contakLogo from '../images/Contak_logotype.png';
-import '../styles/components/navbar.scss';
 
 
 export default function Navbar() {

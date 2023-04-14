@@ -1,7 +1,8 @@
-@use './config.scss';
+@use 'Styles/config.scss';
 
 $gradients: (
-    "linear": ("orange-to-purple": linear-gradient(135deg, #FFCC33 0%, #E233FF 100%))
+    "linear": ("orange-to-purple": linear-gradient(135deg, #FFCC33 0%, #E233FF 100%),
+        "purple-to-blue": linear-gradient(135deg, #CB5EEE 0%, #4BE1EC 100%), ),
 );
 
 @function gradient-name($type, $name) {

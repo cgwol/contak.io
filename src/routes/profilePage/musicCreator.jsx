@@ -1,5 +1,5 @@
-import Navbar from '../../components/navbar';
-import '../../styles/routes/App.scss';
+import Navbar from 'Components/navbar';
+import 'Routes/default.scss';
 
 /*
 artist name 

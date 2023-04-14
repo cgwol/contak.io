@@ -1,5 +1,5 @@
-@use '../main.scss';
-@use './dropdown.scss';
+@use 'Styles/main.scss';
+@use 'Components/dropdown.scss';
 
 .banner {
     background-color: var(--neutral-600);

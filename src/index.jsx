@@ -4,11 +4,10 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Default from 'Routes/default';
+import MemberLogin from 'Routes/memberLogin';
+import MusicCreator from 'Routes/profilePage/musicCreator';
 import reportWebVitals from './reportWebVitals';
-import Default from './routes/default';
-import MemberLogin from './routes/memberLogin';
-import MusicCreator from './routes/profilePage/musicCreator';
-
 
 const router = createBrowserRouter([
   {
@@ -22,7 +21,7 @@ const router = createBrowserRouter([
   {
     path: "musicCreator",
     element: <MusicCreator />,
-    loader: ({params}) => params
+    loader: ({ params }) => params
   }
 ]);
 

@@ -1,8 +1,8 @@
-@use './config.scss';
-@use './colors.scss';
-@use './fontSizes.scss';
-@use './gradients.scss';
-@use './borderRadius.scss';
+@use 'Styles/config.scss';
+@use 'Styles/colors.scss';
+@use 'Styles/fontSizes.scss';
+@use 'Styles/gradients.scss';
+@use 'Styles/borderRadius.scss';
 
 
 // @debug $custom-properties;
@@ -121,4 +121,8 @@ a:hover {
 
 .isolate {
     isolation: isolate;
+}
+
+.ta-center {
+    text-align: center;
 }

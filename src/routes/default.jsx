@@ -1,11 +1,11 @@
 import { faArrowRight, faHand, faMoneyBill, faPaintBrush, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import Navbar from 'Components/navbar';
+import flaskImg from 'Images/cool_flask.png';
+import backgroundImg from 'Images/cool_man.jpeg';
+import diamondImg from 'Images/diamond.png';
+import 'Routes/default.scss';
 import { Link } from "react-router-dom";
-import Navbar from '../components/navbar';
-import flaskImg from '../images/cool_flask.png';
-import backgroundImg from '../images/cool_man.jpeg';
-import diamondImg from '../images/diamond.png';
-import '../styles/routes/App.scss';
 
 
 function Default() {
@@ -18,7 +18,7 @@ function Default() {
           <h1 className='font-family fs-xxl fw-800' style={{ maxWidth: 'min(100%, 900px)', textAlign: 'center' }}>
             royalty-free music reimagined
           </h1>
-          <h2 className='font-family fs-m fw-700 txt-gradient' style={{ maxWidth: 'min(100%, 1000px)', backgroundImage: 'linear-gradient(135deg, #CB5EEE 0%, #4BE1EC 100%)', textTransform: 'uppercase' }}>
+          <h2 className='font-family fs-m fw-700 ta-center txt-gradient bg-linear-gradient-purple-to-blue' style={{ maxWidth: 'min(100%, 1000px)', textTransform: 'uppercase' }}>
             text-to-music ai royalty-free music
           </h2>
           <div style={{ height: '5em' }} />
