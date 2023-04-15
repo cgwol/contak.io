@@ -15,7 +15,7 @@ function Default() {
       <div className="App-body">
         <section className='flex-center flex-column' style={{ minHeight: '100vh', backgroundColor: 'rgba(0,0,0,0.65)' }}>
           <img src={backgroundImg} alt="Man on bed" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: -1, objectFit: 'cover', objectPosition: 'center' }} />
-          <h1 className='font-family fs-xxl fw-800' style={{ maxWidth: 'min(100%, 900px)', textAlign: 'center' }}>
+          <h1 className='font-family fs-xxl fw-800 ta-center' style={{ maxWidth: 'min(100%, 900px)' }}>
             royalty-free music reimagined
           </h1>
           <h2 className='font-family fs-m fw-700 ta-center txt-gradient bg-linear-gradient-purple-to-blue' style={{ maxWidth: 'min(100%, 1000px)', textTransform: 'uppercase' }}>

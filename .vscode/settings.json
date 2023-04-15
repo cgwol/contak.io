@@ -1,0 +1,7 @@
+{
+    "code-runner.executorMapByGlob": {
+        "*": "npm start;",
+    },
+    "code-runner.cwd": "$workspaceRoot",
+    "code-runner.runInTerminal": true,
+}
