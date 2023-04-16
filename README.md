@@ -32,6 +32,10 @@ Deploys the app to the configured repo and branch.
 
 See [gh-pages docs](https://github.com/gitname/react-gh-pages#deploying-a-react-app-to-github-pages) for more information.
 
+### `npm run preview`
+
+Previews a production build on localhost
+
 
 ### `npm test`
 

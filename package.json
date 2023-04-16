@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://cgwol.github.io/contak.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cgwol/contak.io.git"
+  },
   "type": "module",
   "scripts": {
     "start": "vite --open --port 3000",
     "build": "vite build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
+    "preview": "vite preview",
     "test": "react-scripts test",
     "firefox-start": "cross-env BROWSER=firefox npm start"
   },
