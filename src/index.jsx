@@ -7,6 +7,7 @@ import {
 import Default from 'Routes/default';
 import MemberLogin from 'Routes/memberLogin';
 import MusicCreator from 'Routes/profilePage/musicCreator';
+import MusicCreatorPurchases from 'Routes/profilePage/musicCreatorPurchases';
 import reportWebVitals from './reportWebVitals';
 
 const router = createBrowserRouter([
@@ -21,6 +22,11 @@ const router = createBrowserRouter([
   {
     path: "musicCreator",
     element: <MusicCreator />,
+    loader: ({ params }) => params
+  },
+  {
+    path: "musicCreatorPurchases",
+    element: <MusicCreatorPurchases />,
     loader: ({ params }) => params
   }
 ]);
