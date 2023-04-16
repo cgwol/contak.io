@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Default from 'Routes/default';
+import ErrorPage from 'Routes/error';
 import MemberLogin from 'Routes/memberLogin';
 import MusicCreator from 'Routes/profilePage/musicCreator';
 import MusicCreatorPurchases from 'Routes/profilePage/musicCreatorPurchases';
@@ -14,10 +15,12 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Default />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "memberLogin",
-    element: <MemberLogin />
+    element: <MemberLogin />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "musicCreator",
@@ -29,14 +32,16 @@ const router = createBrowserRouter([
     element: <MusicCreatorPurchases />,
     loader: ({ params }) => params
   }
-]);
+], {
+  basename: import.meta.env.BASE_URL,
+});
 
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <RouterProvider router={router} fallbackElement={<ErrorPage />} />
   </React.StrictMode>
 );
 

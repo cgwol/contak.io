@@ -1,6 +1,7 @@
 import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 import react from '@vitejs/plugin-react';
 import autoprefixer from 'autoprefixer';
+import fs from 'fs';
 import path from 'path';
 import { defineConfig } from 'vite';
 
@@ -18,8 +19,14 @@ const defSassAlias = (virtualRoot, relativeRoot) =>
 
 // https://vitejs.dev/config/#conditional-config
 export default defineConfig((args) => {
-    const { mode } = args;
+    const packageJsonRaw = fs.readFileSync(path.resolve(__dirname, "./package.json"));
+    const packageJson = JSON.parse(packageJsonRaw);
+    /**@type string */
+    const repoUrl = packageJson.repository.url;
+    const repoName = repoUrl.substring(repoUrl.lastIndexOf('/'), repoUrl.lastIndexOf('.'));
+    const { command, mode } = args;
     const isProduction = mode.toLowerCase() === "production";
+    const isLocalhost = command === 'serve';
     const postCssPlugins = [
         //https://github.com/postcss/autoprefixer#options
         autoprefixer(),
@@ -37,6 +44,7 @@ export default defineConfig((args) => {
 
     //https://vitejs.dev/config/shared-options.html
     return ({
+        base: isProduction ? repoName : '/',
         build: {
             sourcemap: !isProduction ? 'inline' : false
         },
