@@ -17,9 +17,9 @@ export default function MusicCreatorPurchases() {
 
     const musicList = musicInfo.map(track =>
         <div key={track.id} class="flex-column flex-center">
-            <img src={track.imgUrl} width="256" height="256"></img>
-            <p class="font-family fs-m bold">{track.trackName}</p>
-            <p class="font-family fs-s">Track purchases: {track.numPurchases} <span style={{color: ((track.numNewPurchases > 0) ? "red" : "white")}}>&#40;+{track.numNewPurchases}&#41;</span> </p>
+            <img src={track.imgUrl} style={{width:"75%", maxWidth:"256px"}}></img>
+            <p className="font-family fs-m bold">{track.trackName}</p>
+            <p className="font-family fs-s">Track purchases: {track.numPurchases} <span style={{color: ((track.numNewPurchases > 0) ? "red" : "white")}}>&#40;+{track.numNewPurchases}&#41;</span> </p>
         </div>
     );
 
@@ -32,7 +32,7 @@ export default function MusicCreatorPurchases() {
                         Music Purchase Stats
                     </h1>
                 </section>
-                <section className = "flex" style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', margin: '2em 3em', gap: '1.5em'}}>
+                <section style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', margin: '2em 3em', gap: '1.5em'}}>
                     {musicList}
                 </section>
             </div>

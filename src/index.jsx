@@ -25,12 +25,14 @@ const router = createBrowserRouter([
   {
     path: "musicCreator",
     element: <MusicCreator />,
-    loader: ({ params }) => params
+    errorElement: <ErrorPage />,
+    loader: ({ params }) => params,
   },
   {
     path: "musicCreatorPurchases",
     element: <MusicCreatorPurchases />,
-    loader: ({ params }) => params
+    errorElement: <ErrorPage />,
+    loader: ({ params }) => params,
   }
 ], {
   basename: import.meta.env.BASE_URL,
