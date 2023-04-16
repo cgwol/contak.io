@@ -8,6 +8,7 @@ import Default from 'Routes/default';
 import ErrorPage from 'Routes/error';
 import MemberLogin from 'Routes/memberLogin';
 import MusicCreator from 'Routes/profilePage/musicCreator';
+import MusicCreatorPurchases from 'Routes/profilePage/musicCreatorPurchases';
 import reportWebVitals from './reportWebVitals';
 
 const router = createBrowserRouter([
@@ -27,6 +28,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: ({ params }) => params,
   },
+  {
+    path: "musicCreatorPurchases",
+    element: <MusicCreatorPurchases />,
+    errorElement: <ErrorPage />,
+    loader: ({ params }) => params,
+  }
 ], {
   basename: import.meta.env.BASE_URL,
 });
