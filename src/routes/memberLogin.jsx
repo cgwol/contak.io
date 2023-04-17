@@ -1,13 +1,13 @@
 import Navbar from 'Components/navbar';
-import { useId, useRef } from 'react';
+import { useId, useRef, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { userCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 
 // Sample user database
 const loginInfo = [
     {username: "musician", password: "1234"},
-    {username: "artist", password: "1234"}
+    {username: "creator", password: "1234"}
 ]
 
 const hoursToSeconds = (hours) => hours * 3600;
@@ -17,9 +17,16 @@ export default function MemberLogin() {
     const username = useRef(), password = useRef();
     const navigate = useNavigate();
 
-
     // https://github.com/reactivestack/cookies/tree/master/packages/react-cookie/#getting-started
-    const [cookies, setCookie] = useCookies(['user']); //username cookie, used for login
+    const [cookies, setCookie] = useCookies(['username']); //username cookie, used for login
+
+   useEffect(() => { 
+        if (cookies.username != (null || "undefined")) //user is logged in
+        {
+            navigate("/");
+        }
+   },[cookies]); //execute when page loads or cookies changes
+
 
     const validateLogin = () => {
         const validUser = loginInfo.find(info => info.username === username.current.value && info.password === password.current.value);
@@ -27,7 +34,7 @@ export default function MemberLogin() {
         
         if (isValidLogin)
         {
-            setCookie('user', username.current.value, {path: "/", maxAge: hoursToSeconds(1)});
+            setCookie('username', username.current.value, {path: "/", maxAge: hoursToSeconds(1)});
         }
 
         return isValidLogin;

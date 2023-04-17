@@ -1,5 +1,8 @@
 import Navbar from 'Components/navbar';
 import 'Routes/default.scss';
+import { useCookies } from 'react-cookie';
+import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 /*
 artist name 
@@ -18,6 +21,16 @@ export default function MusicCreator() {
         followerCount: 69
     };
 
+    // https://github.com/reactivestack/cookies/tree/master/packages/react-cookie/#getting-started
+    const [cookies] = useCookies(['username']); //username cookie, used for login
+    const navigate = useNavigate();
+
+    useEffect(() => { 
+        if (cookies.username != "musician") //user is not a music creator
+        {
+            navigate("/");
+        }
+   },[cookies]); //execute when page loads or cookies changes
 
     return (
         <>
