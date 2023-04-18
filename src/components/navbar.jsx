@@ -30,14 +30,15 @@ function NavOptions() {
         <div className="banner-right">
             <button className="basic-btn">View Plans</button>
             <Link to={`/memberLogin`}>Login</Link>
-            <button className="basic-btn">Sign Up</button>
+            <Link to={'/signup'}>
+                <button className="basic-btn">Sign Up</button>
+            </Link>
         </div>
     );
 }
 
 export default function Navbar() {
 
-    
 
     return (
         <div className="banner pos-rel">
@@ -45,7 +46,7 @@ export default function Navbar() {
                 <div className="banner-left">
                     <Link to={'/'}><img src={contakLogo} alt="Contak" style={{ height: '42px', maxHeight: '3rem' }} /></Link>
                 </div>
-                <NavOptions/>
+                <NavOptions />
             </div>
         </div>
     );
