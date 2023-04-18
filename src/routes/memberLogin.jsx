@@ -21,7 +21,7 @@ export default function MemberLogin() {
     const [cookies, setCookie] = useCookies(['username']); //username cookie, used for login
 
    useEffect(() => { 
-        if (cookies.username != (null || "undefined")) //user is logged in
+        if (cookies.username != (null)) //user is logged in
         {
             navigate("/");
         }
