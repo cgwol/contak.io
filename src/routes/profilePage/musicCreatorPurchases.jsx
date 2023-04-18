@@ -4,9 +4,23 @@ import img1 from 'Images/placeholders/1.png';
 import img2 from 'Images/placeholders/2.png';
 import img3 from 'Images/placeholders/3.png';
 import img4 from 'Images/placeholders/4.png';
+import { useCookies } from 'react-cookie';
+import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 export default function MusicCreatorPurchases() {
     //const params = useLoaderData();
+
+    // https://github.com/reactivestack/cookies/tree/master/packages/react-cookie/#getting-started
+    const [cookies] = useCookies(['username']); //username cookie, used for login
+    const navigate = useNavigate();
+
+    useEffect(() => { 
+        if (cookies.username != "musician") //user is not a music creator
+        {
+            navigate("/");
+        }
+   },[cookies]); //execute when page loads or cookies changes
 
     const musicInfo = [ //hardcoded, change for later
         {id: 0, imgUrl: img1, trackName: "Track 1", numPurchases: 1513, numNewPurchases: 9},

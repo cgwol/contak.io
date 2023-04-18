@@ -40,7 +40,6 @@ function NavOptions() {
 export default function Navbar() {
 
 
-
     return (
         <div className="banner pos-rel">
             <div className="flex absolute-fill" style={{ zIndex: 999 }}>
