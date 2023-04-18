@@ -15,6 +15,7 @@ export default function Signup() {
 
     const [accountType, setAccountType] = useState('member')
 
+    //handling email and password fields
     const [showPassword, setShowPassword] = useState(false);
     const [emailError, setEmailError] = useState('');
     const [passwordMatch, setPasswordMatch] = useState(true);
@@ -67,13 +68,13 @@ export default function Signup() {
         }
     };
 
-
     return (
         <>
             <Navbar />
             <form onSubmit={handleSubmit} className='absolute-fill isolate flex-center flex-column' style={{ gap: '3em' }}>
                 <h2>Create Account</h2>
-                <div>
+                {/*dropdown for the account type being created */}
+                <div> 
                     <label htmlFor="accountType">Account Type:
                         <select value={accountType} onChange={handleAccountTypeChange}>
                             <option value="member">Member</option>
