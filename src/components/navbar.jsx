@@ -21,7 +21,10 @@ export default function Navbar() {
                             <a href="#">Artist</a>
                         </div>
                     </div>
-                    <button className="basic-btn">Sign Up</button>
+                    <Link to={'/signup'}>
+                        <button className="basic-btn">Sign Up</button>
+                    </Link>
+                    
                 </div>
             </div>
         </div>
