@@ -7,7 +7,8 @@ import {
 import Default from 'Routes/default';
 import ErrorPage from 'Routes/error';
 import MemberLogin from 'Routes/memberLogin';
-// import MusicCreator from 'Routes/profilePage/musicCreator';
+import Signup from 'Routes/signup';
+import MusicCreator from 'Routes/profilePage/musicCreator';
 import MusicCreatorPurchases from 'Routes/profilePage/musicCreatorPurchases';
 import reportWebVitals from './reportWebVitals';
 import { CookiesProvider } from 'react-cookie';
@@ -24,6 +25,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: "signup",
+    element : <Signup />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "musicCreator",
     errorElement: <ErrorPage />,
     // https://reactrouter.com/en/main/route/lazy
@@ -34,7 +40,7 @@ const router = createBrowserRouter([
     element: <MusicCreatorPurchases />,
     errorElement: <ErrorPage />,
     loader: ({ params }) => params,
-  }
+  },
 ], {
   basename: import.meta.env.BASE_URL,
 });
