@@ -8,7 +8,7 @@ function NavOptions() {
     const [cookies, setCookie, removeCookie] = useCookies(['username']);
 
     function logOut() {
-        removeCookie('username');
+        removeCookie('username', {path: "/"});
         navigate('/');
     }
 
