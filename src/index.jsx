@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {lazy} from 'react';
 import ReactDOM from 'react-dom/client';
 import {
   createBrowserRouter,
@@ -31,9 +31,9 @@ const router = createBrowserRouter([
   },
   {
     path: "musicCreator",
-    element: <MusicCreator />,
     errorElement: <ErrorPage />,
-    loader: ({ params }) => params,
+    // https://reactrouter.com/en/main/route/lazy
+    lazy: () => import('Routes/profilePage/musicCreator')
   },
   {
     path: "musicCreatorPurchases",
