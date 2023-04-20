@@ -4,4 +4,5 @@
     },
     "code-runner.cwd": "$workspaceRoot",
     "code-runner.runInTerminal": true,
+    "javascript.preferences.importModuleSpecifier": "non-relative"
 }

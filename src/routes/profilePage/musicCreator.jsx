@@ -1,8 +1,5 @@
 import Navbar from 'Components/navbar';
 import 'Routes/profilePage/musicCreator.scss';
-import { useCookies } from 'react-cookie';
-import { Link } from 'react-router-dom';
-import { lazy } from 'react';
 import { useLoaderData } from 'react-router-dom';
 
 
@@ -16,6 +13,7 @@ followers/following
 edit profile
 */
 
+
 export const loader = ({ params }) => ({
     username: 'musician',
     email: '',
@@ -23,14 +21,14 @@ export const loader = ({ params }) => ({
     region: '',
     Plan: ''
 
-    
+
 });
 
 function MusicCreator() {
     const params = useLoaderData();
 
     //const [cookies, setCookies] = useCookies(['username']); 
-    
+
     return (
         <>
             <Navbar />
@@ -38,27 +36,27 @@ function MusicCreator() {
                 Profile Overview
             </h1>
 
-            
 
-            <div style={{padding: '0 4em'}}>
-                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em',borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid'}}>
-                    <p style={{marginLeft: '3em'}}>Username</p>
+
+            <div style={{ padding: '0 4em' }}>
+                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em', borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid' }}>
+                    <p style={{ marginLeft: '3em' }}>Username</p>
                     <p className='bg-neutral-700'>{params.username}</p>
                 </div>
-                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em',borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid'}}>
-                    <p style={{marginLeft: '3em'}}>Email</p>
+                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em', borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid' }}>
+                    <p style={{ marginLeft: '3em' }}>Email</p>
                     <p className='bg-neutral-700'></p>
                 </div>
-                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em',borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid'}}>
-                    <p style={{marginLeft: '3em'}}>Date of birth</p>
+                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em', borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid' }}>
+                    <p style={{ marginLeft: '3em' }}>Date of birth</p>
                     <p className='bg-neutral-700'></p>
                 </div>
-                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em',borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid'}}>
-                    <p style={{marginLeft: '3em'}}>Country or region</p>
+                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em', borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid' }}>
+                    <p style={{ marginLeft: '3em' }}>Country or region</p>
                     <p className='bg-neutral-700'></p>
                 </div>
-                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em',borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid'}}>
-                    <p style={{marginLeft: '3em'}}>Your Plan</p>
+                <div className='grid' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', padding: '1.5em 2em', borderColor: 'var(--bg-neutral-300)', borderBottom: '2px solid' }}>
+                    <p style={{ marginLeft: '3em' }}>Your Plan</p>
                     <p className='bg-neutral-700'></p>
                 </div>
 
@@ -67,7 +65,7 @@ function MusicCreator() {
             {/* <h2 className='font-family fs-xxl fw-800' style={{ maxWidth: 'min(100%, 100px)', textAlign: 'center' }}>
                 {params.followerCount}
             </h2> */}
-            
+
             {/* <h2 className='font-family fs-xxl fw-800' style={{ maxWidth: 'min(100%, 100px)', textAlign: 'center' }}>
                 Change password
             </h2> */}
@@ -78,8 +76,4 @@ function MusicCreator() {
 }
 
 
-//export const element = () => 
-// </CookieProvier><MusicCreator/>;
-
-
-export const Component = (()=>< MusicCreator/>);
+export const Component = MusicCreator;
