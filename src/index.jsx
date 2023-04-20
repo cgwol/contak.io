@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {lazy} from 'react';
 import ReactDOM from 'react-dom/client';
 import {
   createBrowserRouter,
@@ -7,9 +7,10 @@ import {
 import Default from 'Routes/default';
 import ErrorPage from 'Routes/error';
 import MemberLogin from 'Routes/memberLogin';
-import MusicCreator from 'Routes/profilePage/musicCreator';
+// import MusicCreator from 'Routes/profilePage/musicCreator';
 import MusicCreatorPurchases from 'Routes/profilePage/musicCreatorPurchases';
 import reportWebVitals from './reportWebVitals';
+import { CookiesProvider } from 'react-cookie';
 
 const router = createBrowserRouter([
   {
@@ -24,9 +25,9 @@ const router = createBrowserRouter([
   },
   {
     path: "musicCreator",
-    element: <MusicCreator />,
     errorElement: <ErrorPage />,
-    loader: ({ params }) => params,
+    // https://reactrouter.com/en/main/route/lazy
+    lazy: () => import('Routes/profilePage/musicCreator')
   },
   {
     path: "musicCreatorPurchases",

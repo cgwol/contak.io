@@ -1,0 +1,14 @@
+@use 'Styles/main.scss';
+
+
+.input-group {
+    position: relative;
+}
+
+.input-group::after {
+    content: 'oguhbe';
+    position: absolute;
+    background-color: var(--bg-neutral-300);
+    inset: 0;
+    width: 100%;
+}

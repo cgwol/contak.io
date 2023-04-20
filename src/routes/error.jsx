@@ -1,7 +1,7 @@
 import { useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
-    const error = useRouteError();
+    const error = {statusText: 'some rror for now'}//useRouteError();
     console.error(error);
 
     return (

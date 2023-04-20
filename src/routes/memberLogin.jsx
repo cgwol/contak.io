@@ -1,7 +1,7 @@
 import Navbar from 'Components/navbar';
 import { useId, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
-import { userCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 
 // Sample user database
@@ -19,7 +19,7 @@ export default function MemberLogin() {
 
 
     // https://github.com/reactivestack/cookies/tree/master/packages/react-cookie/#getting-started
-    const [cookies, setCookie] = useCookies(['user']); //username cookie, used for login
+    const [cookies, setCookie] = useCookies(['username']); //username cookie, used for login
 
     const validateLogin = () => {
         const validUser = loginInfo.find(info => info.username === username.current.value && info.password === password.current.value);
@@ -27,7 +27,7 @@ export default function MemberLogin() {
         
         if (isValidLogin)
         {
-            setCookie('user', username.current.value, {path: "/", maxAge: hoursToSeconds(1)});
+            setCookie('username', username.current.value, {path: "/", maxAge: hoursToSeconds(1)});
         }
 
         return isValidLogin;
