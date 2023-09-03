@@ -5,20 +5,80 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Chrome",
+            // Starts supabase and vite and updates environment variables.
+            // Attaches debugger to all child processes.
+            // Finally, stops local supabase instance when debugger closes
+            "name": "Start Node Dev",
             "request": "launch",
-            "type": "chrome",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}",
-            "sourceMaps": true,
-            "perScriptSourcemaps": "auto",
-            "preLaunchTask": "Start Dev Server In Background",
+            "type": "node-terminal",
+            // "program": "${workspaceFolder}/dev.js"
+            "command": "node dev.js --no-open",
+            "autoAttachChildProcesses": false,
+            "serverReadyAction": {
+                "action": "debugWithChrome",
+                "pattern": "Local:   http://localhost(.+)",
+                "uriFormat": "http://localhost:%s",
+                "killOnServerStop": true,
+            },
+            // "postDebugTask": "Stop Supabase"
         },
         {
-            "name": "Debug Build Process",
+            "name": "Debug with Default Browser",
             "request": "launch",
             "type": "node-terminal",
             "command": "npx vite",
+            "autoAttachChildProcesses": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "Local:   http://localhost(.+)",
+                "uriFormat": "http://localhost:%s",
+                "killOnServerStop": true,
+            },
+        },
+        {
+            "name": "Debug with Chrome",
+            "request": "launch",
+            "type": "node-terminal",
+            "command": "npx vite --mode production",
+            "autoAttachChildProcesses": true,
+            "serverReadyAction": {
+                "action": "debugWithChrome",
+                "pattern": "Local:   http://localhost(.+)",
+                "uriFormat": "http://localhost:%s",
+                "killOnServerStop": true,
+            },
+        },
+        {
+            "name": "Debug with Edge",
+            "request": "launch",
+            "type": "node-terminal",
+            "command": "npx vite",
+            "autoAttachChildProcesses": false,
+            "serverReadyAction": {
+                "action": "debugWithEdge",
+                "pattern": "Local:   http://localhost(.+)",
+                "uriFormat": "http://localhost:%s",
+                "killOnServerStop": true,
+            },
+        },
+        {
+            "name": "Attach to Node Process",
+            "request": "attach",
+            "type": "node",
+            "processId": "${command:PickProcess}",
+        },
+        {
+            "name": "Attach to Node Address:Port",
+            "request": "attach",
+            "type": "node",
+            "port": 5173,
+            "address": "192.168.1.114"
+        },
+        {
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "chrome",
+            "url": "http://localhost:5173"
         },
     ],
 }

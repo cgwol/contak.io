@@ -17,6 +17,8 @@ $colors: (
     ),
     "blue": (100: #4BE1EC,
     ),
+    "red": (100: #f25c5c,
+        200: #ce3a3a),
 );
 
 @function color-name($color, $shade) {

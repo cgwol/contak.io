@@ -4,5 +4,9 @@
     },
     "code-runner.cwd": "$workspaceRoot",
     "code-runner.runInTerminal": true,
-    "javascript.preferences.importModuleSpecifier": "non-relative"
+    "javascript.preferences.importModuleSpecifier": "non-relative",
+    "files.eol": "\n",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
 }

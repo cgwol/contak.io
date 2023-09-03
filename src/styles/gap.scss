@@ -23,14 +23,3 @@ $value in $gap-sizes {
         gap: var(--#{$name}) !important;
     }
 }
-
-
-
-@for $i from 1 through 12 {
-    $name: gap-size-name($size);
-    @include config.define-custom-property($name, $value);
-
-    .#{$name} {
-        gap: var(--#{$name}) !important;
-    }
-}

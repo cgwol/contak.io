@@ -44,6 +44,7 @@ export default defineConfig((args) => {
 
     //https://vitejs.dev/config/shared-options.html
     return ({
+        envPrefix: 'PUBLIC',
         base: isProduction ? repoName : '/',
         build: {
             sourcemap: !isProduction ? 'inline' : false

@@ -5,6 +5,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Authenticate from 'Routes/authenticate';
 import Default from 'Routes/default';
 import ErrorPage from 'Routes/error';
 import MemberLogin from 'Routes/memberLogin';
@@ -29,6 +30,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: "authenticate",
+    element: <Authenticate />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "musicCreator/:id?",
     errorElement: <ErrorPage />,
     // https://reactrouter.com/en/main/route/lazy
@@ -40,11 +46,17 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: ({ params }) => params,
   },
+  {
+    path: "albums",
+    lazy: () => import('Routes/albums'),
+  },
+  {
+    path: "my_albums",
+    lazy: () => import('Routes/my_albums'),
+  },
 ], {
   basename: import.meta.env.BASE_URL,
 });
-
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

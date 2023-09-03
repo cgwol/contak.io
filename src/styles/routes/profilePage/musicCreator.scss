@@ -1,6 +1,13 @@
 @use 'Styles/main.scss';
 
 
+input {
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    border: none;
+}
+
 .input-group {
     position: relative;
 }
