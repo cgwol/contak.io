@@ -1,18 +1,35 @@
 import 'Components/navbar.scss';
 import contakLogo from 'Images/Contak_logotype.png';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from 'react-cookie';
+import { supabase } from '~/global';
 
 function NavOptions() {
     const navigate = useNavigate();
-    const [cookies, setCookie, removeCookie] = useCookies(['username']);
+    const [session, setSession] = useState();
 
-    function logOut() {
-        removeCookie('username', {path: "/"});
+    async function logOut() {
+        await supabase.auth.signOut();
         navigate('/');
     }
 
-    if (cookies.username == "musician")
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                setSession(session);
+            }
+        })
+
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+        })
+
+        return () => subscription.unsubscribe()
+    }, []);
+
+    if (session)
         return ( //musician toolbar
             <div className="banner-right">
                 <button className="basic-btn">View Plans</button>
@@ -20,6 +37,7 @@ function NavOptions() {
                     <button className="basic-btn">Dashboard</button>
                     <div className="dropdown-content">
                         <Link to={`/musicCreator`}>Profile</Link>
+                        <Link to={`/my_albums`}>My Albums</Link>
                         <Link to={`/musicCreatorPurchases`}>Stats</Link>
                     </div>
                 </div>
@@ -45,6 +63,7 @@ export default function Navbar() {
             <div className="flex absolute-fill" style={{ zIndex: 999 }}>
                 <div className="banner-left">
                     <Link to={'/'}><img src={contakLogo} alt="Contak" style={{ height: '42px', maxHeight: '3rem' }} /></Link>
+                    <Link to={'/authenticate'}>Authenticate</Link>
                 </div>
                 <NavOptions />
             </div>

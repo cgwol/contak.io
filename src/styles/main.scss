@@ -3,7 +3,7 @@
 @use 'Styles/fontSizes.scss';
 @use 'Styles/gradients.scss';
 @use 'Styles/borderRadius.scss';
-
+@use 'Styles/gap.scss';
 
 // @debug $custom-properties;
 :root {
@@ -125,4 +125,12 @@ a:hover {
 
 .ta-center {
     text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.pointer {
+    cursor: pointer;
 }

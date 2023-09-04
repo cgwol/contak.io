@@ -10,7 +10,8 @@
             "isBackground": true,
             // This task is run before some debug tasks.
             // Problem is, it's a watch script, and since it never exits, VSCode
-            // complains. All this is needed so VSCode just lets it run.
+            // complains. All this is needed so that VSCode lets `command` run in the background 
+            // until a specified `endPattern` is printed to stdout.
             "problemMatcher": [
                 {
                     "pattern": [
@@ -30,6 +31,11 @@
                     }
                 }
             ]
+        },
+        {
+            "label": "Stop Supabase",
+            "type": "shell",
+            "command": "npx supabase stop",
         }
     ]
 }
