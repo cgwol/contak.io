@@ -13,7 +13,7 @@ NOTE: the following commands should be ran in the project git directory
 
 ### `npm install`
 
-## 4. Download the most recent snapshot from the [https://drive.google.com/drive/folders/1qPBcYSMn-wFF5MfYE8ibuoCdjmojQCwV?usp=sharing](Google Drive)
+## 4. Download the most recent snapshot from the [Google Drive](https://drive.google.com/drive/folders/1qPBcYSMn-wFF5MfYE8ibuoCdjmojQCwV?usp=sharing)
 
 Be sure to follow the instructions in "Development Snapshots/README" 
 
