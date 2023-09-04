@@ -13,7 +13,11 @@ NOTE: the following commands should be ran in the project git directory
 
 ### `npm install`
 
-## 4. Start Local Development Environment
+## 4. Download the most recent snapshot from the [https://drive.google.com/drive/folders/1qPBcYSMn-wFF5MfYE8ibuoCdjmojQCwV?usp=sharing](Google Drive)
+
+Be sure to follow the instructions in "Development Snapshots/README" 
+
+## 5. Start Local Development Environment
 
 NOTE: If using VS Code, you can use the 'Start Node Dev' action in the Run and Debug menu to 
 attach a debugger to the opened browser window
