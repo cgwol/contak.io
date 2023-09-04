@@ -1,6 +1,27 @@
 # Getting Started with Contak
 
-## Available Scripts
+## 1. Install PostgreSQL
+
+Download postgres for your platform at [https://www.postgresql.org/download/](https://www.postgresql.org/download/)
+
+## 2. Install Docker
+
+Download Docker Desktop for your platform at [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
+
+NOTE: the following commands should be ran in the project git directory
+## 3. Install NPM Dependencies
+
+### `npm install`
+
+## 4. Start Local Development Environment
+
+NOTE: If using VS Code, you can use the 'Start Node Dev' action in the Run and Debug menu to 
+attach a debugger to the opened browser window
+### `node dev.js`
+
+<br>
+
+# Available Scripts
 
 In the project directory, you can run:
 
