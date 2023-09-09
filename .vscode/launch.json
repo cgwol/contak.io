@@ -39,7 +39,7 @@
             "name": "Debug with Chrome",
             "request": "launch",
             "type": "node-terminal",
-            "command": "npx vite --mode production",
+            "command": "npx vite",
             "autoAttachChildProcesses": true,
             "serverReadyAction": {
                 "action": "debugWithChrome",
