@@ -63,7 +63,7 @@ const router = createHashRouter([
     ]
   }
 ], {
-  basename: import.meta.env.BASE_URL,
+  //basename: import.meta.env.BASE_URL, //Only for BrowserRouter
 });
 
 //TODO: remove react-cookies dependency

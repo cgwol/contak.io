@@ -59,7 +59,7 @@ export function ErrorMessages() {
                 ))}
                 {errors.length > 1 && <button onClick={clearErrors}>Clear Errors</button>}
             </div>
-            <button onClick={() => addError("Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint officia cumque quod consectetur voluptatum blanditiis?")}>Add Error</button>
+            {/* <button onClick={() => addError("Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint officia cumque quod consectetur voluptatum blanditiis?")}>Add Error</button> */}
         </div>
     </>);
 }
@@ -69,7 +69,7 @@ function ErrorMessage({ error, removeError }) {
     const { heading, message } = (() => {
         let heading = 'Error!';
         let message = err;
-        if (typeof err === 'object') {
+        if (typeof err === 'object' && err) {
             if (err instanceof Error) {
                 if (err.name) {
                     heading = err.name;
@@ -84,6 +84,9 @@ function ErrorMessage({ error, removeError }) {
             if ('code' in err) {
                 heading = `${err.code} Error`;
             }
+        }
+        if (typeof message !== 'string') {
+            message = JSON.stringify(message);
         }
         return { heading, message };
     })()
