@@ -2,8 +2,8 @@ import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom/client';
 import {
-  createBrowserRouter,
-  RouterProvider,
+  createHashRouter,
+  RouterProvider
 } from "react-router-dom";
 import Authenticate from 'Routes/authenticate';
 import Default from 'Routes/default';
@@ -11,53 +11,62 @@ import ErrorPage from 'Routes/error';
 import MemberLogin from 'Routes/memberLogin';
 import MusicCreatorPurchases from 'Routes/profilePage/musicCreatorPurchases';
 import Signup from 'Routes/signup';
+import SiteLayout from '~/siteLayout';
 import reportWebVitals from './reportWebVitals';
 
-const router = createBrowserRouter([
+//NOTE: Github Pages does not support BrowserRouter
+const router = createHashRouter([
   {
-    path: "/",
-    element: <Default />,
+    element: <SiteLayout />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: "memberLogin",
-    element: <MemberLogin />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "signup",
-    element: <Signup />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "authenticate",
-    element: <Authenticate />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "musicCreator/:id?",
-    errorElement: <ErrorPage />,
-    // https://reactrouter.com/en/main/route/lazy
-    lazy: () => import('Routes/profilePage/musicCreator'),
-  },
-  {
-    path: "musicCreatorPurchases",
-    element: <MusicCreatorPurchases />,
-    errorElement: <ErrorPage />,
-    loader: ({ params }) => params,
-  },
-  {
-    path: "albums",
-    lazy: () => import('Routes/albums'),
-  },
-  {
-    path: "my_albums",
-    lazy: () => import('Routes/my_albums'),
-  },
+    children: [
+      {
+        path: "/",
+        element: <Default />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "memberLogin",
+        element: <MemberLogin />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "signup",
+        element: <Signup />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "authenticate",
+        element: <Authenticate />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "musicCreator/:id?",
+        errorElement: <ErrorPage />,
+        // https://reactrouter.com/en/main/route/lazy
+        lazy: () => import('Routes/profilePage/musicCreator'),
+      },
+      {
+        path: "musicCreatorPurchases",
+        element: <MusicCreatorPurchases />,
+        errorElement: <ErrorPage />,
+        loader: ({ params }) => params,
+      },
+      {
+        path: "albums",
+        lazy: () => import('Routes/albums'),
+      },
+      {
+        path: "my_albums",
+        lazy: () => import('Routes/my_albums'),
+      },
+    ]
+  }
 ], {
   basename: import.meta.env.BASE_URL,
 });
 
+//TODO: remove react-cookies dependency
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
