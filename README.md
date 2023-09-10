@@ -26,13 +26,13 @@ attach a debugger to the opened browser window
 Troubleshooting: supabase access token does not work - use the Without dev.js instructions below
 ### `node dev.js`
 
-## Without dev.js - After installation
+## Without dev.js (manually run the process dev.js would have done)
 
 ## Start Local supabase containers (ie. 'the backend')
 ### `npx supabase start`
 
 ## Restore database state from most recent snapshot
-NOTE: Windows users should replace / with \
+NOTE: Windows users should replace / with \\
 <br>
 Troubleshooting: snaplet access token does not work - remove "projectID" line from .snaplet/config.json
 ### `npx snaplet snapshot restore --no-reset ./.snaplet/snapshots/SNPASHOT_ID`
