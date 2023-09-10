@@ -1,5 +1,4 @@
 {
-  "projectId": "clj8td0e30q11ly5uqyt217nu",
   "targetDatabaseUrl": "postgresql://postgres:postgres@localhost:54322/postgres",
   "publicKey": "-----BEGIN RSA PUBLIC KEY-----\nMIIBigKCAYEAvnHF3EeDHNgXvicw6GQXuTVRFqo7Wg63SHSM/gcMbndBJDrCZN/2\nIwWaygTvL8IUaoKaLAD88qrDZHpqg1p1qcWDXaAcwgkRn3+YYUFd9ADcK3nchb30\nr3kp5uCwCvClpjME/2OceDaHrfFtaYHNoVgq6igNGq/MQbNReVgW7obGT/qki/y/\n5yK5dV1Q/j9rPktWIsr0tZrnpkgYIMxJ7+1/ktvB+naTxAMyiyIvcxf7wQ4WUdUf\nSYObMGnduZF7tQc8luXzy8Saqahjev7lR1VCM3AqEfab5F73MG03YGRpkWT6fxZm\nhcKIvvjXzbqdYTPzKMUdFljUJXWVd7WcI6t46EL/pWIpIkMXWRH2N1D4/TYn8aQx\nOQucZr489D4OY6LfhoJPPVdvL41S9OYiJmcKOWodkmXE+oEPrB2KbD89hNR2AcMe\nGrXDnH0VylG38IN4sThD0rzGOM+4T0irb+ywgv2ksL1mb0SwZWWSBtT0DzFt/c0S\n4uXhBMegUY8XAgMBAAE=\n-----END RSA PUBLIC KEY-----\n"
 }

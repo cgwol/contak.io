@@ -58,7 +58,7 @@ const onExit = async () => {
     const yesNo = await asyncQuestion('Do you want to stop supabase? (yes/no) ');
     if (yesNo.charAt(0).toLowerCase() === 'y') {
         console.log('Ok, stopping local supabase instance...');
-        await asyncSpawn('npx', ['supabase', 'stop']);
+        await asyncSpawn('npx', ['supabase', 'stop', '--no-backup']);
     }
     process.exit(0);
 }
@@ -81,21 +81,12 @@ const onExit = async () => {
     }
 
     if (!cmd('psql --version', true).ok) {
-        console.error('PostgreSQL is required to run local database. Install postgres for you system at "https://www.postgresql.org/download/"');
+        console.error(
+            `PostgreSQL is required to run local database. Install postgres for your system at "https://www.postgresql.org/download/"
+If it is already installed, make sure the bin folder is added to your PATH environment variable, then restart your terminal or computer.`);
         return;
     }
 
-    console.log('Logging into supabase CLI...');
-    //either path to access token or access token itself or just --login
-    let accessToken = process.argv.find(entry => entry.startsWith('--login'))?.substring('--login='.length);
-    if (!accessToken || !cmd(`npx supabase login << '${accessToken}'\n`).ok) {
-        accessToken = await asyncGetSupabaseAccessToken();
-    }
-
-    const SUPABASE_PROJECT_ID = await asyncGetSupabaseProjectRef();
-    const DB_HOSTNAME = `db.${SUPABASE_PROJECT_ID}.supabase.co`;
-    const DB_PORT = 5432;
-    const DB_NAME = 'postgres';
     const DEV_ENV = path.resolve('.env.development');
     // const PROD_ENV = path.resolve('.env.development');//'.env.production';
     const PROD_ENV = path.resolve('.env.production');//'.env.production';
@@ -152,6 +143,17 @@ const onExit = async () => {
     }
 
     if (process.argv.includes('--pull-prod-env')) {
+        console.log('Logging into supabase CLI...');
+        //either path to access token or access token itself or just --login
+        let accessToken = process.argv.find(entry => entry.startsWith('--login'))?.substring('--login='.length);
+        if (!accessToken || !cmd(`npx supabase login << '${accessToken}'\n`).ok) {
+            accessToken = await asyncGetSupabaseAccessToken();
+        }
+
+        const SUPABASE_PROJECT_ID = await asyncGetSupabaseProjectRef();
+        const DB_HOSTNAME = `db.${SUPABASE_PROJECT_ID}.supabase.co`;
+        const DB_PORT = 5432;
+        const DB_NAME = 'postgres';
         //Get production database credentials
         const dbConnection = await addPgpassEntry(DB_HOSTNAME, DB_PORT, DB_NAME, useDefaults);
 
@@ -180,7 +182,7 @@ const onExit = async () => {
     const yesNo = await asyncQuestion('Do you want to stop supabase? (yes/no) ');
     if (yesNo.charAt(0).toLowerCase() === 'y') {
         console.log('Ok, stopping local supabase instance...');
-        await asyncSpawn('npx', ['supabase', 'stop']);
+        await asyncSpawn('npx', ['supabase', 'stop', '--no-backup']);
     }
     process.exit(0);
 })();
