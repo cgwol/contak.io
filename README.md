@@ -1,7 +1,8 @@
 # Getting Started with Contak
 
 ## 1. Install PostgreSQL
-
+NOTE: Currently using version 15.1.0.103
+<br>
 Download postgres for your platform at [https://www.postgresql.org/download/](https://www.postgresql.org/download/)
 
 ## 2. Install Docker
@@ -21,7 +22,26 @@ Be sure to follow the instructions in "Development Snapshots/README"
 
 NOTE: If using VS Code, you can use the 'Start Node Dev' action in the Run and Debug menu to 
 attach a debugger to the opened browser window
+<br>
+Troubleshooting: supabase access token does not work - use the Without dev.js instructions below
 ### `node dev.js`
+
+## Without dev.js (manually run the process dev.js would have done)
+
+## Start Local supabase containers (ie. 'the backend')
+### `npx supabase start`
+
+## Restore database state from most recent snapshot
+NOTE: Windows users should replace / with \\
+<br>
+Troubleshooting: snaplet access token does not work - remove "projectID" line from .snaplet/config.json
+### `npx snaplet snapshot restore --no-reset ./.snaplet/snapshots/SNPASHOT_ID`
+
+## Restore database permissions (pg_dump does not capture roles/permissions)
+### `psql --file=./supabase/permissions.sql postgresql://postgres:postgres@localhost:54322/postgres`
+
+## Start Local Web Server and open it in the browser (ie. 'the frontend')
+### `npx vite --open`
 
 <br>
 
