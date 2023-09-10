@@ -24,6 +24,21 @@ NOTE: If using VS Code, you can use the 'Start Node Dev' action in the Run and D
 attach a debugger to the opened browser window
 ### `node dev.js`
 
+## Without dev.js - After installation
+
+## Start Local supabase containers (ie. 'the backend')
+### `npx supabase start`
+
+## Restore database state from most recent snapshot
+NOTE: Windows users should replace / with \
+### `npx snaplet snapshot restore --no-reset ./.snaplet/snapshots/SNPASHOT_ID`
+
+## Restore database permissions (pg_dump does not capture roles/permissions)
+### `psql --file=./supabase/permissions.sql postgresql://postgres:postgres@localhost:54322/postgres`
+
+## Start Local Web Server and open it in the browser (ie. 'the frontend')
+### `npx vite --open`
+
 <br>
 
 # Available Scripts
