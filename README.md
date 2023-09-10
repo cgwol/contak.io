@@ -2,6 +2,7 @@
 
 ## 1. Install PostgreSQL
 NOTE: Currently using version 15.1.0.103
+<br>
 Download postgres for your platform at [https://www.postgresql.org/download/](https://www.postgresql.org/download/)
 
 ## 2. Install Docker
