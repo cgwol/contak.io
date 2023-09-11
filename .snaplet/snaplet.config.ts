@@ -25,7 +25,7 @@ export default defineConfig({
             users: true,
         },
         storage: {
-            migrations: "structure",
+            // migrations: "structure",
             objects: "structure"
         },
         pgsodium: {
