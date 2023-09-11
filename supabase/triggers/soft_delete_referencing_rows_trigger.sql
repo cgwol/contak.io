@@ -1,21 +1,3 @@
-DROP FUNCTION IF EXISTS contak.soft_delete_rows_trigger_v2 ();
-
---Before Delete
-CREATE OR REPLACE FUNCTION contak.soft_delete_rows_trigger_v2 ()
-RETURNS TRIGGER
-LANGUAGE 'plpgsql'
-AS $$ 
-BEGIN
-  -- IF TG_TABLE_NAME NOT IN ('users') THEN --debug block expect error here
-  --   EXECUTE FORMAT('UPDATE contak.%I SET "DELETE OLD: %s NEW: %s" = 1', TG_TABLE_NAME, OLD.deleted_at, NEW.deleted_at);
-  -- END IF;
-  EXECUTE FORMAT('UPDATE %I.%I SET deleted_at = NOW() WHERE deleted_at > NOW() AND %s', 
-      TG_TABLE_SCHEMA, TG_TABLE_NAME,
-      (SELECT STRING_AGG(FORMAT('%I = $1.%I', column_name, column_name), ' AND ') 
-      FROM contak.primary_keys WHERE schema_name = TG_TABLE_SCHEMA AND table_name = TG_TABLE_NAME))
-    USING OLD;
-  RETURN NULL; -- Prevents normal DELETE behavior
-END; $$;
 
 -- After Update
 DROP FUNCTION IF EXISTS contak.get_soft_delete_referencing_rows_commands_v2(text,text,text,text);
@@ -55,38 +37,6 @@ BEGIN
 END; $$;
 
 -- SELECT contak.get_soft_delete_referencing_rows_commands_v2('contak', 'tracks', 'track_id', 'deleted_at')
-
-DROP FUNCTION IF EXISTS contak.create_trigger_soft_delete_referencing_rows_v2 (text, text, text, text);
-CREATE OR REPLACE FUNCTION contak.create_trigger_soft_delete_referencing_rows_v2 (schema_name text, table_name text, column_name text, deleted_at_name text DEFAULT 'deleted_at')
-RETURNS void
-LANGUAGE 'plpgsql'
-AS $$ 
-BEGIN
-  EXECUTE FORMAT(
-    'CREATE OR REPLACE TRIGGER %I BEFORE DELETE ON %I.%I '
-    'FOR EACH ROW WHEN (coalesce(current_setting(''contak.hard_delete'', true), ''off'') != ''on'') '
-    'EXECUTE FUNCTION contak.soft_delete_rows_trigger_v2()',
-    table_name || '_soft_delete_rows_tr', schema_name, table_name);
-
-  EXECUTE FORMAT(
-    'CREATE OR REPLACE TRIGGER %I AFTER UPDATE OF %I '
-    'ON %I.%I FOR EACH ROW EXECUTE FUNCTION contak.soft_delete_referencing_rows_trigger_v2(%L, %L)',
-    table_name || '_soft_delete_referencing_rows_tr', deleted_at_name, 
-    schema_name, table_name, column_name, deleted_at_name);
-END $$;
-
-DROP FUNCTION IF EXISTS contak.drop_trigger_soft_delete_referencing_rows_v2 (text, text, text);
-CREATE OR REPLACE FUNCTION contak.drop_trigger_soft_delete_referencing_rows_v2 (schema_name text, table_name text, column_name text)
-RETURNS void
-LANGUAGE 'plpgsql'
-AS $$ 
-BEGIN
-  EXECUTE FORMAT('DROP TRIGGER IF EXISTS %I ON %I.%I',
-    table_name || '_soft_delete_rows_tr', schema_name, table_name);
-
-  EXECUTE FORMAT('DROP TRIGGER IF EXISTS %I ON %I.%I',
-    table_name || '_soft_delete_referencing_rows_tr', schema_name, table_name);
-END $$;
 
 
 -- SELECT command FROM contak.get_soft_delete_referencing_rows_commands('contak', 'albums', 'album_id', '''someone''s text''')
