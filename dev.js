@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { fork } from 'child_process';
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import path from 'path';
 import { asyncNonEmptyQuestion, asyncQuestion, asyncSpawn, cmd, restrictAccess, sleep } from './tools/os.js';
@@ -137,7 +138,7 @@ If it is already installed, make sure the bin folder is added to your PATH envir
 
     //Snaplet does not include permissions or roles in dump
     console.log('Restoring local database permissions...');
-    if (!cmd('psql --file=./supabase/permissions.sql postgresql://postgres:postgres@localhost:54322/postgres ')) {
+    if (!cmd('psql --file=./supabase/permissions.sql postgresql://postgres:postgres@localhost:54322/postgres ').ok) {
         console.error('\nCould not restore local database permissions');
         return;
     }
@@ -169,6 +170,22 @@ If it is already installed, make sure the bin folder is added to your PATH envir
         }
         restrictAccess(PROD_ENV);
     }
+
+    // Build and host the AI Service in the background
+    if (!cmd(`docker compose -f docker-compose.yml -f docker-compose.debug.yml up --build --detach`).ok) {
+        console.error(`Could not start AI Service`);
+        return;
+    }
+
+    // NOTE: selfHost must run in its own process
+    const selfHost = fork('./tools/selfHost.js', ['--local']);
+    await new Promise((resolve, reject) => {
+        selfHost.on('message', message => {
+            if (message.type == 'START') {
+                resolve(message.data);
+            }
+        })
+    });
 
     await sleep(100);
 

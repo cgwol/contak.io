@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  ai-service:
+    image: ai-service
+    build:
+      context: ./ai-service
+      dockerfile: ./Dockerfile
+    # All traffic is first routed through nginx:5000 then to ai-service:5000
+    expose:
+      - 5000
+    # Musicgen requires at least 1 GPU
+    # NOTE: GPU in Docker requires NVIDIA Container Toolkit to be installed on host
+    # Install instructions: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [ gpu ]
+              driver: nvidia
+  nginx:
+    image: nginx
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+    ports:
+      - 5000:80
+    depends_on:
+      - ai-service

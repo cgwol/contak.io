@@ -80,5 +80,30 @@
             "type": "chrome",
             "url": "http://localhost:5173"
         },
+        {
+            "name": "Python Debug: Listen",
+            "type": "python",
+            "request": "attach",
+            "listen": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/ai-service",
+                    "remoteRoot": "/ai-service"
+                }
+            ],
+        },
     ],
+    "compounds": [
+        {
+            "name": "Launch Debug All",
+            "configurations": [
+                "Start Node Dev",
+                "Python Debug: Listen"
+            ],
+            "stopAll": true
+        }
+    ]
 }

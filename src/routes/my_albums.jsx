@@ -4,6 +4,7 @@ import { Album } from '~/components/album';
 import Navbar from '~/components/navbar';
 import { supabase } from '~/global';
 import { fetchSignedAlbumUrls } from '~/loaders/fetchSignedAlbumUrls';
+import { createAlbum } from '~/queries/albums';
 
 export { default as ErrorBoundary } from 'Routes/error';
 
@@ -41,21 +42,14 @@ export const Component = function MyAlbums() {
     const [isAddPopupVisible, setIsAddPopupVisible] = useState(false);
     const showPopup = () => setIsAddPopupVisible(true);
     const hidePopup = () => setIsAddPopupVisible(false);
-    const createAlbum = async () => {
-        const album_name = albumNameRef.current.value;
-        if (!album_name) {
-            throw new Error('Album name cannot be empty')
-        }
-        const { data, error } = await supabase.from('owned_albums').insert({ album_name });
-        if (error) {
-            throw error;
-        }
-        revalidator.revalidate();
-        albumNameRef.current.value = '';
-    }
     const onCreateAlbum = (e) => {
         e.preventDefault();
-        createAlbum().then(hidePopup);
+        const album_name = albumNameRef.current.value;
+        createAlbum(album_name).then(() => {
+            hidePopup();
+            revalidator.revalidate();
+            albumNameRef.current.value = '';
+        });
     }
     return (<>
         <Navbar />

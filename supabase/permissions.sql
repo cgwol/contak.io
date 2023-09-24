@@ -34,6 +34,9 @@ GRANT SELECT ON public.public_tracks TO authenticated;
 REVOKE ALL ON public.album_tracks FROM PUBLIC, authenticated;
 GRANT SELECT ON public.album_tracks TO authenticated;
 
+REVOKE ALL ON public.public_settings FROM authenticated, anon, PUBLIC;
+GRANT SELECT ON public.public_settings TO authenticated, anon, PUBLIC;
+
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.album_creators TO authenticated;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.track_creators TO authenticated;

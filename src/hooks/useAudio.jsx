@@ -2,7 +2,7 @@ import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "~/global";
 
 //TODO: Lazily load audio only when user plays the track
-export const useAudio = (src, { volume = 1, playbackRate = 1, autoPlay = false }) => {
+export const useAudio = (src, { volume = 1, playbackRate = 1, autoPlay = false } = {}) => {
     const [playing, setPlaying] = useState(autoPlay);
     const audio = useMemo(() => new Audio(src), [src]);
     const canPlay = useRef(false);

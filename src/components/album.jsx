@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRevalidator } from "react-router-dom";
 import { AlbumTrack } from "~/components/albumTrack";
 import { supabase } from "~/global";
+import { addAlbumCreator, addAlbumTrack, addNewTrackToAlbum, deleteAlbum, deleteAlbumCover, deleteAlbumTrack, restoreAlbum, updateAlbumName, upsertAlbumCover } from "~/queries/albums";
+import { addTrackCreator, deleteTrack, deleteTrackFile, restoreTrack, updateTrackName, upsertTrackFile } from "~/queries/tracks";
 
 
 export function Album({ album }) {
@@ -27,7 +29,7 @@ export function Album({ album }) {
             }
             setOwnedTracks(data);
         }
-
+        setOwnedTracksLoading(true);
         getData().finally(() => setOwnedTracksLoading(false));
     }, [album])
 
@@ -35,189 +37,18 @@ export function Album({ album }) {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const showPopup = () => setIsPopupVisible(true);
     const hidePopup = () => setIsPopupVisible(false);
-    const upsertAlbumCover = async (albumCover) => {
-        const { data, error } = await supabase.storage.from('album_covers')
-            .upload(`${album.album_id}/${albumCover.name}`, albumCover, { upsert: true });
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const deleteAlbumCover = async (albumCover) => {
-        const path = albumCover && album.album_covers.find(cover => cover.endsWith('/' + albumCover.name))
-            || album.album_covers[0];
-        if (!path) {
-            throw new Error(`Cannot delete '${albumCover.name}' because it does not exists`);
-        }
-        const { data, error } = await supabase.storage.from('album_covers')
-            .remove([path]);
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const updateAlbumName = async (album_name) => {
-        const { data, error } = await supabase.from('owned_albums').update({ album_name }).eq('album_id', album.album_id);
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const deleteAlbum = async () => {
-        const { data, error } = await supabase.from('owned_albums').delete()
-            .eq('album_id', album.album_id);
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const restoreAlbum = async () => {
-        const { data, error } = await supabase.from('owned_albums').update({ deleted_at: 'infinity' })
-            .eq('album_id', album.album_id);
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const addAlbumCreator = async (username, isOwner) => {
-        const { data: user, error: userError } = await supabase.from('public_users')
-            .select('user_type, user_id').eq('username', username).maybeSingle();
-        if (userError) {
-            throw userError;
-        }
-        if (!user) {
-            throw new Error(`Cannot find user "${username}"`);
-        }
-        const { user_type, user_id } = user;
-        if (user_type !== 'Creator') {
-            throw new Error(`User ${username} is not a Creator`);
-        }
-        const { data, error } = await supabase.from('album_creators').upsert({
-            album_id: album.album_id,
-            creator_id: user_id,
-            is_owner: isOwner,
-            deleted_at: 'infinity',
-        }, { onConflict: 'album_id,creator_id' });
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const addAlbumTrack = async (track_id) => {
-        const { data, error } = await supabase.from('owned_album_tracks').upsert({
-            album_id: album.album_id,
-            track_id,
-            deleted_at: 'infinity',
-        }, { onConflict: 'album_id,track_id' });
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const deleteAlbumTrack = async (track_id) => {
-        const { data, error } = await supabase.from('owned_album_tracks').delete()
-            .eq('track_id', track_id)
-            .eq('album_id', album.album_id);
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const upsertTrackFile = async (track_id, track_file) => {
-        const { data: storage, error: storageError } = await supabase.storage.from('tracks')
-            .upload(`${track_id}/${track_file.name}`, track_file, { upsert: true });
-        if (storageError) {
-            throw storageError;
-        }
-        return storage;
-    }
-    const deleteTrackFile = async (trackPath) => {
-        const { data, error } = await supabase.storage.from('tracks').remove([trackPath]);
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const addTrack = async (track_name, track_file) => {
-        const { data: track, error } = await supabase.from('owned_tracks').insert({
-            track_name
-        }).select().maybeSingle();
-        if (error) {
-            throw error;
-        }
-        await upsertTrackFile(track.track_id, track_file);
-        return track;
-    }
-    const deleteTrack = async (track_id) => {
-        const { data, error } = await supabase.from('owned_tracks').delete()
-            .eq('track_id', track_id);
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const restoreTrack = async (track_id) => {
-        const { data, error } = await supabase.from('owned_tracks').update({
-            deleted_at: 'infinity'
-        }).eq('track_id', track_id);
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const addNewTrackToAlbum = async (trackName, trackFile) => {
-        const track = await addTrack(trackName, trackFile);
-        if (track && track.track_id) {
-            return await addAlbumTrack(track.track_id);
-        }
-        throw new Error(`Could not add track "${trackName}" to album: ${track}`);
-    }
-    const addTrackCreator = async (track_id, username, is_owner) => {
-        const { data: user, error: userError } = await supabase.from('public_users')
-            .select('user_type, user_id').eq('username', username).maybeSingle();
-        if (userError) {
-            throw userError;
-        }
-        if (!user) {
-            throw new Error(`Cannot find user "${username}"`);
-        }
-        const { user_type, user_id } = user;
-        if (user_type !== 'Creator') {
-            throw new Error(`User ${username} is not a Creator`);
-        }
-        const { data, error } = await supabase.from('track_creators').upsert({
-            track_id,
-            creator_id: user_id,
-            is_owner,
-            deleted_at: 'infinity',
-        }, { onConflict: 'track_id,creator_id' });
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-    const updateTrackName = async (track_id, track_name) => {
-        const { data, error } = await supabase.from('owned_tracks').update({
-            track_name,
-        }).eq('track_id', track_id);
-        if (error) {
-            throw error;
-        }
-        return data;
-    }
-
 
     const onEditAlbum = (e) => {
         e.preventDefault();
         const promises = [];
         const albumName = albumNameRef.current.value;
         if (albumName !== album.album_name) {
-            promises.push(updateAlbumName(albumName));
+            promises.push(updateAlbumName(album.album_id, albumName));
         }
 
         const albumCover = albumCoverRef.current.files[0];
         if (albumCover) {
-            promises.push(upsertAlbumCover(albumCover));
+            promises.push(upsertAlbumCover(album.album_id, albumCover));
         }
         if (promises.length) {
             Promise.all(promises)
@@ -227,17 +58,22 @@ export function Album({ album }) {
     }
     const onDeleteAlbumCover = () => {
         const albumCover = albumCoverRef.current.files[0];
-        deleteAlbumCover(albumCover).then(() => {
+        const albumCoverPath = albumCover && album.album_covers.find(cover => cover.endsWith('/' + albumCover.name))
+            || album.album_covers[0];
+        if (!albumCoverPath) {
+            throw new Error(`Cannot delete '${albumCover?.name}' because it does not exists`);
+        }
+        deleteAlbumCover(albumCoverPath).then(() => {
             revalidator.revalidate();
         }).finally(hidePopup);
     }
     const onDeleteAlbum = () => {
-        deleteAlbum().then(() => {
+        deleteAlbum(album.album_id).then(() => {
             revalidator.revalidate();
         }).finally(hidePopup);
     }
     const onRestoreAlbum = () => {
-        restoreAlbum().then(() => {
+        restoreAlbum(album.album_id).then(() => {
             revalidator.revalidate();
         })
     }
@@ -247,7 +83,7 @@ export function Album({ album }) {
         if (!username) {
             return;
         }
-        addAlbumCreator(username, isOwner).then(() => {
+        addAlbumCreator(album.album_id, username, isOwner).then(() => {
             revalidator.revalidate();
         });
     }
@@ -261,7 +97,7 @@ export function Album({ album }) {
         if (!trackFile) {
             throw new Error('Audio track is required for new tracks');
         }
-        addNewTrackToAlbum(trackName, trackFile).then(() => {
+        addNewTrackToAlbum(album.album_id, trackName, trackFile).then(() => {
             revalidator.revalidate();
         });
     }
@@ -270,7 +106,7 @@ export function Album({ album }) {
         if (!trackID) {
             throw new Error(`Track ID is required for a track to be added to an album`);
         }
-        addAlbumTrack(trackID).then(() => {
+        addAlbumTrack(album.album_id, trackID).then(() => {
             revalidator.revalidate();
         });
     }
@@ -279,7 +115,7 @@ export function Album({ album }) {
         if (!track_id) {
             throw new Error(`Cannot delete album track without providing a track ID`);
         }
-        deleteAlbumTrack(track_id).then(() => {
+        deleteAlbumTrack(album.album_id, track_id).then(() => {
             revalidator.revalidate();
         });
     }

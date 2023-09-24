@@ -32,7 +32,7 @@ function NavOptions() {
     if (session)
         return ( //musician toolbar
             <div className="banner-right">
-                <button className="basic-btn">View Plans</button>
+                <Link to={`/musicGenerator`} style={{ marginRight: '1em' }}>Music Generator</Link>
                 <div className="dropdown">
                     <button className="basic-btn">Dashboard</button>
                     <div className="dropdown-content">
@@ -46,7 +46,7 @@ function NavOptions() {
         );
     return ( //guest toolbar
         <div className="banner-right">
-            <button className="basic-btn">View Plans</button>
+            <Link to={`/musicGenerator`} style={{ marginRight: '1em' }}>Music Generator</Link>
             <Link to={`/memberLogin`}>Login</Link>
             <Link to={'/signup'}>
                 <button className="basic-btn">Sign Up</button>
