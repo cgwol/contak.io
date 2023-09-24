@@ -26,3 +26,7 @@ yarn-error.log*
 .snaplet/snapshots
 .snaplet/structure.d.ts
 .snaplet/snaplet.d.ts
+
+# python
+.venv
+__pycache__

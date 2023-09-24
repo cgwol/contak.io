@@ -38,6 +38,8 @@ class PgpassEntry {
     }
 }
 
+export const localDbConnection = new PgpassEntry('localhost', '54322', 'postgres', 'postgres', 'postgres');
+
 /**
  * pgpass Grammar: hostname:port:database:username:password separated by newlines (\n or \r\n).
  * Keeps empty lines

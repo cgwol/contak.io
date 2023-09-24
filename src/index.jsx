@@ -60,6 +60,10 @@ const router = createHashRouter([
         path: "my_albums",
         lazy: () => import('Routes/my_albums'),
       },
+      {
+        path: "musicGenerator",
+        lazy: () => import('Routes/musicGenerator'),
+      },
     ]
   }
 ], {

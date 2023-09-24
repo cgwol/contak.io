@@ -43,6 +43,7 @@
     "cross-env": "^7.0.3",
     "gh-pages": "^5.0.0",
     "immutable": "^4.3.0",
+    "localtunnel": "^2.0.2",
     "postcss": "^8.4.21",
     "sass": "^1.61.0",
     "snaplet": "^0.56.2",

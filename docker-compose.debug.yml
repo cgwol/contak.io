@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  ai-service:
+    # open port 5678 for python debug server
+    command:
+      [
+        "sh",
+        "-c",
+        # gunicorn runner with hot reloading
+        "pip install debugpy -t /tmp && python /tmp/debugpy --connect host.docker.internal:5678 -m gunicorn --bind ai-service:5000 --timeout 0 --reload app:app"
+          # Uncomment to use Flask runner
+          # "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 -m flask run --no-debugger --no-reload --host 0.0.0.0 --port 5000"
+      ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # Enables hot reloading when files on host are changed
+    volumes:
+      - ./ai-service:/ai-service:ro
+
+  nginx:
+    # Reload nginx when config files change on host
+    # NOTE: Does not work because mounted file system does not receive events
+    # Run `docker exec -it contak-nginx-1 nginx -s reload` when changing files in nginx directory
+    # command:
+    #   [
+    #     "sh",
+    #     "-c",
+    #     "apt-get update -y && apt-get install -y inotify-tools && while inotifywait --recursive --event modify /etc/nginx/; do nginx -s reload; done"
+    #   ]
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
