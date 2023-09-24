@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { fork } from 'child_process';
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import path from 'path';
 import { asyncNonEmptyQuestion, asyncQuestion, asyncSpawn, cmd, restrictAccess, sleep } from './tools/os.js';
@@ -58,7 +59,7 @@ const onExit = async () => {
     const yesNo = await asyncQuestion('Do you want to stop supabase? (yes/no) ');
     if (yesNo.charAt(0).toLowerCase() === 'y') {
         console.log('Ok, stopping local supabase instance...');
-        await asyncSpawn('npx', ['supabase', 'stop']);
+        await asyncSpawn('npx', ['supabase', 'stop', '--no-backup']);
     }
     process.exit(0);
 }
@@ -81,21 +82,12 @@ const onExit = async () => {
     }
 
     if (!cmd('psql --version', true).ok) {
-        console.error('PostgreSQL is required to run local database. Install postgres for you system at "https://www.postgresql.org/download/"');
+        console.error(
+            `PostgreSQL is required to run local database. Install postgres for your system at "https://www.postgresql.org/download/"
+If it is already installed, make sure the bin folder is added to your PATH environment variable, then restart your terminal or computer.`);
         return;
     }
 
-    console.log('Logging into supabase CLI...');
-    //either path to access token or access token itself or just --login
-    let accessToken = process.argv.find(entry => entry.startsWith('--login'))?.substring('--login='.length);
-    if (!accessToken || !cmd(`npx supabase login << '${accessToken}'\n`).ok) {
-        accessToken = await asyncGetSupabaseAccessToken();
-    }
-
-    const SUPABASE_PROJECT_ID = await asyncGetSupabaseProjectRef();
-    const DB_HOSTNAME = `db.${SUPABASE_PROJECT_ID}.supabase.co`;
-    const DB_PORT = 5432;
-    const DB_NAME = 'postgres';
     const DEV_ENV = path.resolve('.env.development');
     // const PROD_ENV = path.resolve('.env.development');//'.env.production';
     const PROD_ENV = path.resolve('.env.production');//'.env.production';
@@ -146,12 +138,23 @@ const onExit = async () => {
 
     //Snaplet does not include permissions or roles in dump
     console.log('Restoring local database permissions...');
-    if (!cmd('psql --file=./supabase/permissions.sql postgresql://postgres:postgres@localhost:54322/postgres ')) {
+    if (!cmd('psql --file=./supabase/permissions.sql postgresql://postgres:postgres@localhost:54322/postgres ').ok) {
         console.error('\nCould not restore local database permissions');
         return;
     }
 
     if (process.argv.includes('--pull-prod-env')) {
+        console.log('Logging into supabase CLI...');
+        //either path to access token or access token itself or just --login
+        let accessToken = process.argv.find(entry => entry.startsWith('--login'))?.substring('--login='.length);
+        if (!accessToken || !cmd(`npx supabase login << '${accessToken}'\n`).ok) {
+            accessToken = await asyncGetSupabaseAccessToken();
+        }
+
+        const SUPABASE_PROJECT_ID = await asyncGetSupabaseProjectRef();
+        const DB_HOSTNAME = `db.${SUPABASE_PROJECT_ID}.supabase.co`;
+        const DB_PORT = 5432;
+        const DB_NAME = 'postgres';
         //Get production database credentials
         const dbConnection = await addPgpassEntry(DB_HOSTNAME, DB_PORT, DB_NAME, useDefaults);
 
@@ -168,6 +171,22 @@ const onExit = async () => {
         restrictAccess(PROD_ENV);
     }
 
+    // Build and host the AI Service in the background
+    if (!cmd(`docker compose -f docker-compose.yml -f docker-compose.debug.yml up --build --detach`).ok) {
+        console.error(`Could not start AI Service`);
+        return;
+    }
+
+    // NOTE: selfHost must run in its own process
+    const selfHost = fork('./tools/selfHost.js', ['--local']);
+    await new Promise((resolve, reject) => {
+        selfHost.on('message', message => {
+            if (message.type == 'START') {
+                resolve(message.data);
+            }
+        })
+    });
+
     await sleep(100);
 
     console.log('supabase local server:');
@@ -180,7 +199,7 @@ const onExit = async () => {
     const yesNo = await asyncQuestion('Do you want to stop supabase? (yes/no) ');
     if (yesNo.charAt(0).toLowerCase() === 'y') {
         console.log('Ok, stopping local supabase instance...');
-        await asyncSpawn('npx', ['supabase', 'stop']);
+        await asyncSpawn('npx', ['supabase', 'stop', '--no-backup']);
     }
     process.exit(0);
 })();

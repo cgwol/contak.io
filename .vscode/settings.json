@@ -7,6 +7,9 @@
     "javascript.preferences.importModuleSpecifier": "non-relative",
     "files.eol": "\n",
     "[python]": {
-        "editor.defaultFormatter": "ms-python.autopep8"
+        "editor.defaultFormatter": "ms-python.autopep8",
+        "editor.formatOnSave": true,
     },
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.activateEnvironment": true,
 }

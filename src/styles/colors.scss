@@ -19,6 +19,7 @@ $colors: (
     ),
     "red": (100: #f25c5c,
         200: #ce3a3a),
+    "orange": (400: #fa7b1a)
 );
 
 @function color-name($color, $shade) {

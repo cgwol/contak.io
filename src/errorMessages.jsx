@@ -41,7 +41,6 @@ export function ErrorMessages() {
 
     useEffect(() => {
         const onError = (e) => {
-            e.preventDefault();
             addError(e.reason);
         }
         window.addEventListener('unhandledrejection', onError);
@@ -66,33 +65,51 @@ export function ErrorMessages() {
 
 function ErrorMessage({ error, removeError }) {
     const err = error.error;
-    const { heading, message } = (() => {
+    const { heading, message, backgroundColor } = (() => {
         let heading = 'Error!';
         let message = err;
+        let backgroundColor = 'bg-red-200';
         if (typeof err === 'object' && err) {
             if (err instanceof Error) {
                 if (err.name) {
                     heading = err.name;
                 }
-                message = import.meta.env.PROD ? err.message : err.stack || err.message;
+
+                if (import.meta.env.DEV) {
+                    message = err.stack.includes(err.message) ? err.stack : `${err.message}\n${err.stack}`
+                } else {
+                    message = err.message;
+                }
                 return { heading, message };
             }
+
             if ('message' in err) {
                 message = err.message;
                 //TODO: show hint, detail from supabase error
             }
-            if ('code' in err) {
-                heading = `${err.code} Error`;
+
+            switch (err.level) {
+                case 'warn':
+                    heading = `Warning`;
+                    backgroundColor = 'bg-orange-400';
+                default: {
+                    if ('statusCode' in err) {
+                        heading = `HTTP ${err.statusCode} Error`;
+                    }
+                    else if ('code' in err) {
+                        heading = `${err.code} Error`;
+                    }
+                }
             }
         }
         if (typeof message !== 'string') {
             message = JSON.stringify(message);
         }
-        return { heading, message };
+        return { heading, message, backgroundColor };
     })()
 
     return (<>
-        <div className="bg-red-200" style={{ maxWidth: '40%', padding: '.75em', boxShadow: '1px 1px 7px 1px rgba(0, 0, 0, 1)' }}>
+        <div className={backgroundColor} style={{ maxWidth: '40%', padding: '.75em', boxShadow: '1px 1px 7px 1px rgba(0, 0, 0, 1)' }}>
             <button onClick={() => removeError(error.id)} style={{ float: 'right' }}>
                 <FontAwesomeIcon icon={faWindowClose} />
             </button>
