@@ -171,11 +171,11 @@ If it is already installed, make sure the bin folder is added to your PATH envir
         restrictAccess(PROD_ENV);
     }
 
-    // Build and host the AI Service in the background
+    /* Build and host the AI Service in the background
     if (!cmd(`docker compose -f docker-compose.yml -f docker-compose.debug.yml up --build --detach`).ok) {
         console.error(`Could not start AI Service`);
         return;
-    }
+    } 
 
     // NOTE: selfHost must run in its own process
     const selfHost = fork('./tools/selfHost.js', ['--local']);
@@ -185,7 +185,7 @@ If it is already installed, make sure the bin folder is added to your PATH envir
                 resolve(message.data);
             }
         })
-    });
+    }); */
 
     await sleep(100);
 

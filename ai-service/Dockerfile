@@ -1,4 +1,5 @@
-FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+# FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+FROM python:3.10-slim
 
 EXPOSE 5000
 

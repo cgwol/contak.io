@@ -116,3 +116,25 @@ export const addNewTrackToAlbum = async (album_id, trackName, trackFile) => {
     }
     throw new Error(`Could not add track "${trackName}" to album: ${track}`);
 }
+
+export const purchaseAlbum = async (album_id, user_id) => {
+    const { data, error } = await supabase.from('purchased_albums').upsert({
+        album_id: album_id,
+        user_id: user_id
+    }, { onConflict: 'album_id,user_id' });
+    if (error) {
+        throw error;
+    }
+    return data;
+}
+
+export const unPurchaseAlbum = async (album_id, user_id) => {
+    const { data, error } = await supabase.from('purchased_albums')
+        .delete()
+        .eq('album_id', album_id)
+        .eq('user_id', user_id);
+    if (error) {
+        throw error;
+    }
+    return data;
+}

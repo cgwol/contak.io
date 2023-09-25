@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRevalidator } from "react-router-dom";
 import { AlbumTrack } from "~/components/albumTrack";
 import { supabase } from "~/global";
-import { addAlbumCreator, addAlbumTrack, addNewTrackToAlbum, deleteAlbum, deleteAlbumCover, deleteAlbumTrack, restoreAlbum, updateAlbumName, upsertAlbumCover } from "~/queries/albums";
+import { useSession } from "~/hooks/useSession";
+import { addAlbumCreator, addAlbumTrack, addNewTrackToAlbum, deleteAlbum, deleteAlbumCover, deleteAlbumTrack, restoreAlbum, updateAlbumName, upsertAlbumCover, purchaseAlbum, unPurchaseAlbum} from "~/queries/albums";
 import { addTrackCreator, deleteTrack, deleteTrackFile, restoreTrack, updateTrackName, upsertTrackFile } from "~/queries/tracks";
 
 
@@ -20,6 +21,7 @@ export function Album({ album }) {
     const [ownedTracks, setOwnedTracks] = useState(null);
     const [ownedTracksLoading, setOwnedTracksLoading] = useState(true);
     const [selectedTrackIndex, setSelectedTrackIndex] = useState(null);
+    const [session, loading] = useSession();
 
     useEffect(() => {
         const getData = async () => {
@@ -183,11 +185,25 @@ export function Album({ album }) {
         })
     }
 
-    const { album_id, album_name, signedUrls, album_creators, album_tracks, deleted_at } = album;
+    const onPurchaseAlbum = (e) => {
+        e.preventDefault();
+        purchaseAlbum(album.album_id, session.user.id).then(() => revalidator.revalidate()); //afasdasdadgesetghdrthxtghx FIX LATER
+    }
+
+    const onUnPurchaseAlbum = (e) => {
+        e.preventDefault();
+        unPurchaseAlbum(album.album_id, session.user.id).then(() => revalidator.revalidate()); //afasdasdadgesetghdrthxtghx FIX LATER
+    }
+
+    const { album_id, album_name, signedUrls, album_creators, album_tracks, deleted_at, is_purchased_by_user } = album;
     const hasAlbumCover = signedUrls && signedUrls.length;
     // deleted_at can be set ahead a few seconds by database on delete. this accounts for that.
     const now = Date.now() + (2 * 1000);
     const isDeleted = new Date(deleted_at) <= now;
+    const amICreator = (!loading) && session && album_creators.some(
+        creator => creator.creator_id == session.user.id
+    )
+    
     return (<>
         <div className={`absolute-fill flex-center flex-column ${isPopupVisible ? '' : 'hidden'}`} style={{ zIndex: 999, backgroundColor: 'rgba(0,0,0,0.8)', rowGap: '1em', overflowY: 'scroll', }} onClick={hidePopup}>
             <form onSubmit={onEditAlbum} onClick={(e) => { e.stopPropagation() }}
@@ -395,7 +411,7 @@ export function Album({ album }) {
         </div >
         <div className="flex bg-neutral-800" style={{ flexWrap: 'wrap' }}>
             <div className="bg-neutral-800" style={{ padding: '2em', flexBasis: '30%', cursor: 'pointer' }}
-                onClick={isDeleted ? onRestoreAlbum : showPopup}>
+                onClick={amICreator ? (isDeleted ? onRestoreAlbum : showPopup) : undefined}> {/*TODO: replace "undefined" with an HD popup of album cover*/}
                 <p>{isDeleted ? 'Deleted' : ''}</p>
                 {hasAlbumCover && <img src={signedUrls[0].signedUrl} alt={`album cover`}></img>}
                 <p className="fs-s">{album_name}</p>
@@ -409,6 +425,15 @@ export function Album({ album }) {
                         <AlbumTrack key={track.track_id} track={track} />)}
                 </div>
             )}
+            {!amICreator && (
+                !is_purchased_by_user ? (
+                <button type="button" onClick={onPurchaseAlbum}>Purchase Album</button>
+                ) : (
+                <button type="button" onClick={onUnPurchaseAlbum}>Un-purchase Album</button>
+                )
+                )
+            }
+            
         </div>
     </>)
 }

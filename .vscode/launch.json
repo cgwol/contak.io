@@ -15,7 +15,7 @@
             "command": "node dev.js --no-open",
             "autoAttachChildProcesses": false,
             "serverReadyAction": {
-                "action": "debugWithChrome",
+                "action": "openExternally",
                 "pattern": "Local:   http://localhost(.+)",
                 "uriFormat": "http://localhost:%s",
                 "killOnServerStop": true,
