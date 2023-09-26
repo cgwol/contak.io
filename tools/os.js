@@ -29,9 +29,9 @@ export const asyncNonEmptyQuestion = async (question) => {
  * @param {boolean} redirectOutput true if using stdout from process and want no output shown, false to show all output but leave stdout out of return value (dont pipe to js)
  * @returns ok if exited with exit code = 0, otherwise returns ok = false with error
  */
-export const cmd = (command, redirectOutput = false) => {
+export const cmd = (command, redirectOutput = false, env = null) => {
     try {
-        const stdout = execSync(command, { stdio: redirectOutput ? 'pipe' : 'inherit', encoding: redirectOutput ? 'utf-8' : undefined });
+        const stdout = execSync(command, { stdio: redirectOutput ? 'pipe' : 'inherit', encoding: redirectOutput ? 'utf-8' : undefined, env });
         return { ok: true, stdout };
     } catch (error) {
         if (!redirectOutput) {

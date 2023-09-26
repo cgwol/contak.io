@@ -171,10 +171,27 @@ If it is already installed, make sure the bin folder is added to your PATH envir
         restrictAccess(PROD_ENV);
     }
 
-    // Build and host the AI Service in the background
-    if (!cmd(`docker compose -f docker-compose.yml -f docker-compose.debug.yml up --build --detach`).ok) {
-        console.error(`Could not start AI Service`);
+    const gpu_name = cmd(`nvidia-smi --query-gpu name --format=csv,noheader`, true).stdout;
+    const env = { DEVICE: 'cpu' };
+    if (gpu_name) {
+        console.log(`Found gpu ${gpu_name}`);
+        env.DEVICE = 'gpu';
+    } else {
+        console.log('No NVIDIA GPU found, building for CPU...');
+        console.log('If host has a NVIDIA GPU, install the NVIDIA Container Toolkit to use it in docker.')
+    }
+    // NOTE: docker command errors when passed a custom env from node, use explicit steps...
+    const dockerCompose = `docker compose -f docker-compose.yml -f docker-compose.debug.yml`;
+    if (!cmd(`${dockerCompose} build --build-arg DEVICE=${env.DEVICE}`).ok) {
+        console.error('\nCould not build AI service');
         return;
+    }
+    if (!cmd(`${dockerCompose} create --no-build`).ok) {
+        console.error(`\nCould not create AI Service containers`);
+        return;
+    }
+    if (!cmd(`${dockerCompose} start`).ok) {
+        console.error(`\nCould not start AI Service`);
     }
 
     // NOTE: selfHost must run in its own process
@@ -184,6 +201,9 @@ If it is already installed, make sure the bin folder is added to your PATH envir
             if (message.type == 'START') {
                 resolve(message.data);
             }
+        })
+        selfHost.on('error', (code) => {
+            reject(code);
         })
     });
 

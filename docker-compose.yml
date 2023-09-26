@@ -6,6 +6,8 @@ services:
     build:
       context: ./ai-service
       dockerfile: ./Dockerfile
+      args:
+        - DEVICE
     # All traffic is first routed through nginx:5000 then to ai-service:5000
     expose:
       - 5000
@@ -17,7 +19,9 @@ services:
         reservations:
           devices:
             - capabilities: [ gpu ]
-              driver: nvidia
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
   nginx:
     image: nginx
     build:

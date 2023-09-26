@@ -91,7 +91,9 @@ export const Component = () => {
                         </form>
                         {isLoading && <>
                             <h3>Generating Track...</h3>
-                            <p>Utilizing {status.data.gpu_count} {status.data.gpu}</p>
+                            <p>Utilizing {status.data.gpu_enabled ?
+                                `${status.data.gpu_count} ${status.data.gpu}`
+                                : `${status.data.cpu} cpu`}</p>
                         </>}
                         {audioRef.current && (<div>
                             <div className="flex-center flex-column">
