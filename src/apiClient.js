@@ -1,5 +1,61 @@
 import { supabase } from "~/global";
 
+/**
+ * Custom fetch function that allows setting infinite timeout \
+ * Tries to match browser fetch functionality
+ * @param {string | URL} url 
+ * @param {{method: ('GET'|'POST'|'PUT'|'DELETE')?, headers: Object, signal: AbortSignal, timeout: number?, responseType: ('blob'|'arraybuffer'|'text')?}} init
+ * @returns {Promise<Response>} Response on success, object otherwise
+ */
+const asyncHttpRequest = (url, { method = 'GET', headers = {}, body = null, signal = null, timeout = 300 * 1000, responseType = 'blob' } = {}) => {
+    const http = new XMLHttpRequest();
+    http.open(method, url);
+    for (const [key, value] of Object.entries(headers)) {
+        http.setRequestHeader(key, value);
+    }
+    signal?.addEventListener('abort', function (e) {
+        http.abort();
+    }, { once: true });
+    http.timeout = timeout;
+    http.responseType = responseType;
+    http.send(body);
+    return new Promise((resolve, reject) => {
+        http.onerror = function (progress) {
+            reject({
+                statusCode: this.status,
+                message: this.statusText,
+                response: this.response,
+            });
+        }
+        http.ontimeout = function (progress) {
+            reject({
+                statusCode: 408,
+                message: `Request for ${url} timed out after ${this.timeout / 1000} seconds`
+            });
+        }
+        http.onabort = function (progress) {
+            resolve(signal.reason);
+        }
+        http.onload = function (progress) {
+            const rawHeaders = this.getAllResponseHeaders();
+            const arr = rawHeaders.trim().split(/[\r\n]+/);
+            const headers = new Headers();
+            for (const line of arr) {
+                const parts = line.split(": ");
+                const header = parts.shift();
+                const value = parts.join(": ");
+                headers.set(header, value);
+            }
+            const response = new Response(this.response, {
+                status: this.status,
+                statusText: this.statusText,
+                headers,
+            });
+            resolve(response);
+        }
+    });
+}
+
 class APIClent {
     /**
      * 
@@ -10,7 +66,6 @@ class APIClent {
         this.defaultHeaders = {
             // localtunnel requires user to enter host IP without this header
             "Bypass-Tunnel-Reminder": true,
-            // "Access-Control-Allow-Origin": "*",
         };
     }
 
@@ -35,26 +90,10 @@ class APIClent {
         const request = new URL(this.baseUrl);
         request.pathname = "/musicgen";
         request.searchParams.set("description", description);
-        const doFetch = () => {
-            return fetch(request, {
-                signal,
-                headers: {
-                    ...this.defaultHeaders,
-                }
-            });
-        }
-        try {
-            return await doFetch();
-        } catch (error) {
-            if (error instanceof TypeError) {
-                Promise.reject({
-                    level: 'warn',
-                    message: 'Request is taking longer than usual, retrying...'
-                });
-                return await doFetch();
-            }
-            throw error;
-        }
+        return await asyncHttpRequest(request, {
+            signal,
+            headers: this.defaultHeaders,
+        });
     }
 
     async status({ signal = null } = {}) {
