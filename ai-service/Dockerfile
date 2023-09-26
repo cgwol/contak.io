@@ -1,4 +1,3 @@
-# FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
 FROM python:3.10-slim
 
 EXPOSE 5000
@@ -12,7 +11,7 @@ ENV PYTHONUNBUFFERED=1
 ENV TZ="America/Phoenix"
 # ARG CACHEBUST=1
 # Install git (required for pip install)
-RUN apt-get -y update
+RUN apt-get -y update 
 RUN apt-get -y install git
 
 WORKDIR /ai-service
@@ -23,9 +22,11 @@ COPY . /ai-service
 RUN adduser -u 5678 --disabled-password --gecos "" ai-service-user && chown -R ai-service-user /ai-service
 USER ai-service-user
 
-ENV PATH="${PATH}:/home/ai-service-user/.local/bin"
+ENV PATH "${PATH}:/home/ai-service-user/.local/bin"
+ARG DEVICE='cpu'
 # Install pip requirements as non-root user
-RUN python -m pip install -r requirements.txt && rm requirements.txt
+RUN python -m pip install --upgrade pip
+RUN python -m pip install -r requirements.txt -r requirements.${DEVICE}.txt && rm requirements.txt
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "300", "app:app"]

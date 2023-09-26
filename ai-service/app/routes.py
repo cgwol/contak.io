@@ -1,3 +1,4 @@
+import platform
 from io import BytesIO
 
 import numpy as np
@@ -41,10 +42,19 @@ def index():
 @app.route("/status")
 def status():
     app.logger.info("AI Service is healthy!")
+    gpu_enabled = False
+    gpu = None
+    gpu_count = None
+    if torch.cuda.is_available():
+        gpu_enabled = True
+        gpu = torch.cuda.get_device_name()
+        gpu_count = torch.cuda.device_count()
+
     return success({
-        "gpu_enabled": torch.cuda.is_available(),
-        "gpu": torch.cuda.get_device_name(),
-        "gpu_count": torch.cuda.device_count()
+        "cpu": platform.processor() or platform.machine(),
+        "gpu_enabled": gpu_enabled,
+        "gpu": gpu,
+        "gpu_count": gpu_count
     })
 
 
