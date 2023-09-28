@@ -21,8 +21,7 @@ GRANT USAGE ON SEQUENCE contak.tracks_track_id_seq TO authenticated;
 
 GRANT SELECT, INSERT, UPDATE, DELETE, TRIGGER ON contak.track_creators TO authenticated;
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON contak.album_purchases TO authenticated;
---to do: add controls on album purchases
+GRANT SELECT ON contak.album_purchases TO authenticated;
 
 
 --public Permissions
