@@ -26,16 +26,6 @@ const router = createHashRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "memberLogin",
-        element: <MemberLogin />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "signup",
-        element: <Signup />,
-        errorElement: <ErrorPage />,
-      },
-      {
         path: "authenticate",
         element: <Authenticate />,
         errorElement: <ErrorPage />,
@@ -62,7 +52,7 @@ const router = createHashRouter([
       },
       {
         path: "my_purchased_albums",
-        lazy: () => import('~/routes/my_purchased_albums'),
+        lazy: () => import('Routes/my_purchased_albums'),
       },
       {
         path: "musicGenerator",

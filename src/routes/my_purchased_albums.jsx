@@ -13,10 +13,6 @@ export const loader = async () => {
     if (profileError) {
         throw profileError;
     }
-    if (my_profile.user_type !== 'Creator') {
-        throw new Error('Access Denied: Only Creators can access this page');
-    }
-
 
     const { data: my_purchased_albums, error } = await supabase.from('my_purchased_albums').select().limit(30);
     if (error) {
@@ -35,7 +31,7 @@ export const loader = async () => {
     return { my_purchased_albums, my_profile };
 };
 
-export const Component = function MyAlbums() {
+export const Component = function MyPurchasedAlbums() {
     const { my_purchased_albums, my_profile } = useLoaderData();
     return (<>
         <Navbar />

@@ -48,6 +48,7 @@ function NavOptions() {
                         <Link to={`/musicCreatorPurchases`}>Stats</Link>
                     </div>
                 </div>
+                <button className="basic-btn" onClick={logOut}>Log Out</button>
             </div>
         );
     return ( //guest toolbar
