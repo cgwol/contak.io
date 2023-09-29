@@ -21,6 +21,9 @@ GRANT USAGE ON SEQUENCE contak.tracks_track_id_seq TO authenticated;
 
 GRANT SELECT, INSERT, UPDATE, DELETE, TRIGGER ON contak.track_creators TO authenticated;
 
+GRANT SELECT, INSERT, UPDATE, DELETE, TRIGGER ON contak.album_purchases TO authenticated;
+
+
 
 --public Permissions
 GRANT USAGE ON SCHEMA public TO authenticated;
@@ -52,3 +55,7 @@ GRANT SELECT ON public.my_albums TO authenticated;
 GRANT SELECT ON public.my_tracks TO authenticated;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.my_profile TO authenticated;
+
+GRANT SELECT ON public.my_purchased_albums TO authenticated;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.purchased_albums TO authenticated;

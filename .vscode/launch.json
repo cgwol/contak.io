@@ -23,6 +23,24 @@
             // "postDebugTask": "Stop Supabase"
         },
         {
+            // Starts supabase and vite and updates environment variables.
+            // Attaches debugger to all child processes.
+            // Finally, stops local supabase instance when debugger closes
+            "name": "Start Node Dev (Default Browser)",
+            "request": "launch",
+            "type": "node-terminal",
+            // "program": "${workspaceFolder}/dev.js"
+            "command": "node dev.js --no-open",
+            "autoAttachChildProcesses": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "Local:   http://localhost(.+)",
+                "uriFormat": "http://localhost:%s",
+                "killOnServerStop": true,
+            },
+            // "postDebugTask": "Stop Supabase"
+        },
+        {
             "name": "Debug with Default Browser",
             "request": "launch",
             "type": "node-terminal",

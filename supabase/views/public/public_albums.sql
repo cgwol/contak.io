@@ -1,6 +1,9 @@
 
 CREATE OR REPLACE VIEW public.public_albums WITH (security_invoker = true) AS 
-SELECT albums.album_id, albums.album_name, albums.created_at, creators.album_creators, tracks.album_tracks, covers.album_covers
+SELECT albums.album_id, albums.album_name, albums.created_at, creators.album_creators, tracks.album_tracks, covers.album_covers,
+EXISTS (
+	SELECT * FROM public.purchased_albums WHERE purchased_albums.album_id = albums.album_id
+) AS is_purchased_by_user
 FROM contak.albums
 JOIN LATERAL (
 	SELECT array_to_json(ARRAY_AGG(JSON_BUILD_OBJECT(
