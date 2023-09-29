@@ -42,6 +42,3 @@ LEFT JOIN LATERAL (
 ) AS covers(album_covers) ON true
 --Include deleted albums
 WHERE auth.uid() IN (SELECT album_purchases.user_id FROM contak.album_purchases WHERE album_purchases.album_id = albums.album_id);
-
-
-GRANT SELECT ON public.my_purchased_albums TO authenticated;

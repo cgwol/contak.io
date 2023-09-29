@@ -2,7 +2,7 @@
 import { fork } from 'child_process';
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import path from 'path';
-import { asyncNonEmptyQuestion, asyncQuestion, asyncSpawn, cmd, restrictAccess, sleep } from './tools/os.js';
+import { asyncNonEmptyQuestion, asyncQuestion, cmd, restrictAccess, sleep } from './tools/os.js';
 import { addPgpassEntry } from './tools/pgpass.js';
 
 const asyncGetSupabaseProjectRef = async () => {
@@ -59,7 +59,7 @@ const onExit = async () => {
     const yesNo = await asyncQuestion('Do you want to stop supabase? (yes/no) ');
     if (yesNo.charAt(0).toLowerCase() === 'y') {
         console.log('Ok, stopping local supabase instance...');
-        await asyncSpawn('npx', ['supabase', 'stop', '--no-backup']);
+        cmd(`npx supabase stop --no-backup`);
     }
     process.exit(0);
 }
@@ -125,8 +125,8 @@ If it is already installed, make sure the bin folder is added to your PATH envir
                 return -1;
             })[0];
         if (mostRecentSnapshot) {
-            console.log(`Restoring local database using most recent snapshot at '${mostRecentSnapshot}'...`);
-            if (!cmd(`npx snaplet snapshot restore --no-reset "${mostRecentSnapshot}"`).ok) {
+            console.log(`Restoring local database data using most recent snapshot at '${mostRecentSnapshot}'...`);
+            if (!cmd(`npx snaplet snapshot restore --no-reset --no-schema "${mostRecentSnapshot}"`).ok) {
                 console.error(`\nCould not restore local database using snapshot at ${mostRecentSnapshot}`);
                 return;
             }
@@ -217,10 +217,5 @@ If it is already installed, make sure the bin folder is added to your PATH envir
     cmd('npx vite ' + openArg);
     // await asyncSpawn('npx', ['vite', openArg]);
 
-    const yesNo = await asyncQuestion('Do you want to stop supabase? (yes/no) ');
-    if (yesNo.charAt(0).toLowerCase() === 'y') {
-        console.log('Ok, stopping local supabase instance...');
-        await asyncSpawn('npx', ['supabase', 'stop', '--no-backup']);
-    }
-    process.exit(0);
+    await onExit();
 })();

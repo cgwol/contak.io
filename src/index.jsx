@@ -8,9 +8,7 @@ import {
 import Authenticate from 'Routes/authenticate';
 import Default from 'Routes/default';
 import ErrorPage from 'Routes/error';
-import MemberLogin from 'Routes/memberLogin';
 import MusicCreatorPurchases from 'Routes/profilePage/musicCreatorPurchases';
-import Signup from 'Routes/signup';
 import SiteLayout from '~/siteLayout';
 import reportWebVitals from './reportWebVitals';
 

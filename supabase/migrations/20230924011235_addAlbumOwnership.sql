@@ -12,15 +12,13 @@ CREATE TABLE IF NOT EXISTS contak.album_purchases (
             REFERENCES contak.albums(album_id)
 );
 
-COMMENT ON TABLE contak.album_purchases IS 'Tracks relationship between users and the albums they have purchased'
+COMMENT ON TABLE contak.album_purchases IS 'Tracks relationship between users and the albums they have purchased';
 
 ---
 
 CREATE OR REPLACE VIEW public.purchased_albums WITH (security_invoker = true, security_barrier = true) AS 
 SELECT * FROM contak.album_purchases
 WHERE (album_purchases.user_id = auth.uid() AND album_purchases.deleted_at > NOW());
-
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.purchased_albums TO authenticated;
 
 COMMENT ON VIEW public.purchased_albums IS 'Modifible view on contak.album_purchases. Returns only NON-deleted album purchases';
 
@@ -66,9 +64,6 @@ LEFT JOIN LATERAL (
 	WHERE objects.bucket_id = 'album_covers' AND objects.name LIKE albums.album_id || '/%'
 ) AS covers(album_covers) ON true
 WHERE albums.deleted_at > NOW();
-
-
-GRANT SELECT ON public.public_albums TO authenticated;
 
 --
 
