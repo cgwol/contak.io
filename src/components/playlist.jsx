@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useRevalidator } from "react-router-dom";
-import { AlbumTrack } from "~/components/albumTrack";
+import { PlaylistTrack } from "~/components/playlistTrack";
 import { supabase } from "~/global";
 import { useSession } from "~/hooks/useSession";
-import { addAlbumCreator, addAlbumTrack, addNewTrackToAlbum, deleteAlbum, deleteAlbumCover, deleteAlbumTrack, restoreAlbum, updateAlbumName, upsertAlbumCover, purchaseAlbum, unPurchaseAlbum} from "~/queries/albums";
+import { addPlaylistCreator, addPlaylistTrack, addNewTrackToPlaylist, deletePlaylist, deletePlaylistCover, deletePlaylistTrack, restorePlaylist, updatePlaylistName, upsertPlaylistCover, purchasePlaylist, unPurchasePlaylist} from "~/queries/playlists";
 import { addTrackCreator, deleteTrack, deleteTrackFile, restoreTrack, updateTrackName, upsertTrackFile } from "~/queries/tracks";
 
 
-export function Album({ album }) {
-    const albumNameRef = useRef(null);
-    const albumCoverRef = useRef(null);
+export function Playlist({ playlist }) {
+    const playlistNameRef = useRef(null);
+    const playlistCoverRef = useRef(null);
     const creatorUsernameRef = useRef(null);
     const isOwnerRef = useRef(null);
     const trackNameRef = useRef(null);
@@ -33,24 +33,24 @@ export function Album({ album }) {
         }
         setOwnedTracksLoading(true);
         getData().finally(() => setOwnedTracksLoading(false));
-    }, [album])
+    }, [playlist])
 
     const revalidator = useRevalidator();
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const showPopup = () => setIsPopupVisible(true);
     const hidePopup = () => setIsPopupVisible(false);
 
-    const onEditAlbum = (e) => {
+    const onEditPlaylist = (e) => {
         e.preventDefault();
         const promises = [];
-        const albumName = albumNameRef.current.value;
-        if (albumName !== album.album_name) {
-            promises.push(updateAlbumName(album.album_id, albumName));
+        const playlistName = playlistNameRef.current.value;
+        if (playlistName !== playlist.album_name) {
+            promises.push(updatePlaylistName(playlist.album_id, playlistName));
         }
 
-        const albumCover = albumCoverRef.current.files[0];
-        if (albumCover) {
-            promises.push(upsertAlbumCover(album.album_id, albumCover));
+        const playlistCover = playlistCoverRef.current.files[0];
+        if (playlistCover) {
+            promises.push(upsertPlaylistCover(playlist.album_id, playlistCover));
         }
         if (promises.length) {
             Promise.all(promises)
@@ -58,24 +58,24 @@ export function Album({ album }) {
                 .finally(hidePopup)
         }
     }
-    const onDeleteAlbumCover = () => {
-        const albumCover = albumCoverRef.current.files[0];
-        const albumCoverPath = albumCover && album.album_covers.find(cover => cover.endsWith('/' + albumCover.name))
-            || album.album_covers[0];
-        if (!albumCoverPath) {
-            throw new Error(`Cannot delete '${albumCover?.name}' because it does not exists`);
+    const onDeletePlaylistCover = () => {
+        const playlistCover = playlistCoverRef.current.files[0];
+        const playlistCoverPath = playlistCover && playlist.album_covers.find(cover => cover.endsWith('/' + playlistCover.name))
+            || playlist.album_covers[0];
+        if (!playlistCoverPath) {
+            throw new Error(`Cannot delete '${playlistCover?.name}' because it does not exists`);
         }
-        deleteAlbumCover(albumCoverPath).then(() => {
+        deletePlaylistCover(playlistCoverPath).then(() => {
             revalidator.revalidate();
         }).finally(hidePopup);
     }
-    const onDeleteAlbum = () => {
-        deleteAlbum(album.album_id).then(() => {
+    const onDeletePlaylist = () => {
+        deletePlaylist(playlist.album_id).then(() => {
             revalidator.revalidate();
         }).finally(hidePopup);
     }
-    const onRestoreAlbum = () => {
-        restoreAlbum(album.album_id).then(() => {
+    const onRestorePlaylist = () => {
+        restorePlaylist(playlist.album_id).then(() => {
             revalidator.revalidate();
         })
     }
@@ -85,11 +85,11 @@ export function Album({ album }) {
         if (!username) {
             return;
         }
-        addAlbumCreator(album.album_id, username, isOwner).then(() => {
+        addPlaylistCreator(playlist.album_id, username, isOwner).then(() => {
             revalidator.revalidate();
         });
     }
-    const onAddNewTrackToAlbum = (e) => {
+    const onAddNewTrackToPlaylist = (e) => {
         e.preventDefault();
         const trackName = trackNameRef.current.value;
         const trackFile = trackFileRef.current.files[0];
@@ -99,32 +99,32 @@ export function Album({ album }) {
         if (!trackFile) {
             throw new Error('Audio track is required for new tracks');
         }
-        addNewTrackToAlbum(album.album_id, trackName, trackFile).then(() => {
+        addNewTrackToPlaylist(playlist.album_id, trackName, trackFile).then(() => {
             revalidator.revalidate();
         });
     }
-    const onAddAlbumTrack = (e) => {
+    const onAddPlaylistTrack = (e) => {
         const trackID = e.target.name;
         if (!trackID) {
-            throw new Error(`Track ID is required for a track to be added to an album`);
+            throw new Error(`Track ID is required for a track to be added to a playlist`);
         }
-        addAlbumTrack(album.album_id, trackID).then(() => {
+        addPlaylistTrack(playlist.album_id, trackID).then(() => {
             revalidator.revalidate();
         });
     }
-    const onDeleteAlbumTrack = (e) => {
+    const onDeletePlaylistTrack = (e) => {
         const track_id = e.target.name;
         if (!track_id) {
-            throw new Error(`Cannot delete album track without providing a track ID`);
+            throw new Error(`Cannot delete playlist track without providing a track ID`);
         }
-        deleteAlbumTrack(album.album_id, track_id).then(() => {
+        deletePlaylistTrack(playlist.album_id, track_id).then(() => {
             revalidator.revalidate();
         });
     }
     const onDeleteTrack = (e) => {
         const track_id = e.target.name;
         if (!track_id) {
-            throw new Error(`Cannot delete album track without providing a track ID`);
+            throw new Error(`Cannot delete playlist track without providing a track ID`);
         }
         deleteTrack(track_id).then(() => {
             revalidator.revalidate();
@@ -133,7 +133,7 @@ export function Album({ album }) {
     const onRestoreTrack = (e) => {
         const track_id = e.target.name;
         if (!track_id) {
-            throw new Error(`Cannot delete album track without providing a track ID`);
+            throw new Error(`Cannot delete playlist track without providing a track ID`);
         }
         restoreTrack(track_id).then(() => {
             revalidator.revalidate();
@@ -185,18 +185,18 @@ export function Album({ album }) {
         })
     }
 
-    const onPurchaseAlbum = (e) => {
+    const onPurchasePlaylist = (e) => {
         e.preventDefault();
-        purchaseAlbum(album.album_id, session.user.id).then(() => revalidator.revalidate()); //afasdasdadgesetghdrthxtghx FIX LATER
+        purchasePlaylist(playlist.album_id, session.user.id).then(() => revalidator.revalidate()); //afasdasdadgesetghdrthxtghx FIX LATER
     }
 
-    const onUnPurchaseAlbum = (e) => {
+    const onUnPurchasePlaylist = (e) => {
         e.preventDefault();
-        unPurchaseAlbum(album.album_id, session.user.id).then(() => revalidator.revalidate()); //afasdasdadgesetghdrthxtghx FIX LATER
+        unPurchasePlaylist(playlist.album_id, session.user.id).then(() => revalidator.revalidate()); //afasdasdadgesetghdrthxtghx FIX LATER
     }
 
-    const { album_id, album_name, signedUrls, album_creators, album_tracks, deleted_at, is_purchased_by_user } = album;
-    const hasAlbumCover = signedUrls && signedUrls.length;
+    const { album_id, album_name, signedUrls, album_creators, album_tracks, deleted_at, is_purchased_by_user } = playlist;
+    const hasPlaylistCover = signedUrls && signedUrls.length;
     // deleted_at can be set ahead a few seconds by database on delete. this accounts for that.
     const now = Date.now() + (2 * 1000);
     const isDeleted = new Date(deleted_at) <= now;
@@ -206,34 +206,34 @@ export function Album({ album }) {
     
     return (<>
         <div className={`absolute-fill flex-center flex-column ${isPopupVisible ? '' : 'hidden'}`} style={{ zIndex: 999, backgroundColor: 'rgba(0,0,0,0.8)', rowGap: '1em', overflowY: 'scroll', }} onClick={hidePopup}>
-            <form onSubmit={onEditAlbum} onClick={(e) => { e.stopPropagation() }}
+            <form onSubmit={onEditPlaylist} onClick={(e) => { e.stopPropagation() }}
                 className="bg-neutral-700 br-100" style={{ padding: '1.25em' }}>
                 <button onClick={hidePopup} style={{ float: 'right' }} type='button'>Cancel</button>
-                <h3>Edit Album</h3>
+                <h3>Edit Playlist</h3>
                 <div className="flex-column gap-s" >
                     <div>
-                        <h5>Album Name</h5>
+                        <h5>Playlist Name</h5>
                         <div>
-                            <input type="text" placeholder='album name...' required
-                                ref={albumNameRef} defaultValue={album_name}></input>
+                            <input type="text" placeholder='playlist name...' required
+                                ref={playlistNameRef} defaultValue={album_name}></input>
                         </div>
                     </div>
                     <div>
-                        <h5>Album Cover</h5>
+                        <h5>Playlist Cover</h5>
                         <div>
                             <input type="file" accept="image/*" placeholder='Choose Image'
-                                ref={albumCoverRef} src={hasAlbumCover && signedUrls[0].signedUrl}></input>
-                            {hasAlbumCover && <button onClick={onDeleteAlbumCover}>Delete Image</button>}
+                                ref={playlistCoverRef} src={hasPlaylistCover && signedUrls[0].signedUrl}></input>
+                            {hasPlaylistCover && <button onClick={onDeletePlaylistCover}>Delete Image</button>}
                         </div>
                     </div>
                     {Array.isArray(album_creators) && <div>
-                        <h5>Album Creators</h5>
+                        <h5>Playlist Creators</h5>
                         <div>
                             {album_creators.map(creator => {
                                 const { creator_id, first_name, last_name, is_owner } = creator;
-                                const onDeleteAlbumCreator = () => {
+                                const onDeletePlaylistCreator = () => {
                                     supabase.from('album_creators').delete()
-                                        .eq('album_id', album.album_id)
+                                        .eq('album_id', playlist.album_id)
                                         .eq('creator_id', creator_id).then(({ data, error }) => {
                                             if (error) {
                                                 throw error;
@@ -245,7 +245,7 @@ export function Album({ album }) {
                                     <div key={creator_id} className="fs-xxs grid" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
                                         <p>{`${first_name} ${last_name}`}</p>
                                         <p className="fs-xxs">{is_owner ? 'Owner' : 'Creator'}</p>
-                                        <button disabled={is_owner} onClick={onDeleteAlbumCreator}>Remove</button>
+                                        <button disabled={is_owner} onClick={onDeletePlaylistCreator}>Remove</button>
                                     </div>
                                 )
                             })}
@@ -261,12 +261,12 @@ export function Album({ album }) {
                         </div>
                     </div>}
                     <div className="flex-center gap-xl" style={{ marginTop: '1em' }}>
-                        <button type='submit'>Update Album</button>
-                        <button type="button" onClick={onDeleteAlbum}>Delete Album</button>
+                        <button type='submit'>Update Playlist</button>
+                        <button type="button" onClick={onDeletePlaylist}>Delete Playlist</button>
                     </div>
                 </div>
             </form>
-            <form onSubmit={onAddNewTrackToAlbum} onClick={(e) => { e.stopPropagation() }}
+            <form onSubmit={onAddNewTrackToPlaylist} onClick={(e) => { e.stopPropagation() }}
                 className="bg-neutral-700 br-100" style={{ padding: '1.25em' }}>
                 <h3>Add New Track</h3>
                 <div className="flex-column gap-s" >
@@ -284,7 +284,7 @@ export function Album({ album }) {
                         </div>
                     </div>
                     <div>
-                        <button type="submit">Add Track to Album</button>
+                        <button type="submit">Add Track to Playlist</button>
                     </div>
                 </div>
             </form>
@@ -294,8 +294,8 @@ export function Album({ album }) {
                 <div style={{ maxHeight: '300px', overflowY: 'scroll' }}>
                     {!ownedTracksLoading && ownedTracks && ownedTracks?.map((track, index) => {
                         const { track_id, track_name, track_creators, audio_files, deleted_at } = track;
-                        const isOnAlbum = album_tracks?.find(album_track =>
-                            album_track.track_id === track_id) != null;
+                        const isOnPlaylist = album_tracks?.find(playlist_track =>
+                            playlist_track.track_id === track_id) != null;
                         const isTrackDeleted = new Date(deleted_at) <= (Date.now() + (2 * 1000));
                         return (
                             <div key={track_id} className="grid"
@@ -309,12 +309,12 @@ export function Album({ album }) {
                                     <button type="button" onClick={onRestoreTrack}
                                         name={track_id}>Restore Track</button>
                                 ) : (<>
-                                    {isOnAlbum ? (
-                                        <button type="button" onClick={onDeleteAlbumTrack}
-                                            name={track_id}>Remove From Album</button>
+                                    {isOnPlaylist ? (
+                                        <button type="button" onClick={onDeletePlaylistTrack}
+                                            name={track_id}>Remove From Playlist</button>
                                     ) : (
-                                        <button type="button" onClick={onAddAlbumTrack}
-                                            name={track_id}>Add to Album</button>
+                                        <button type="button" onClick={onAddPlaylistTrack}
+                                            name={track_id}>Add to Playlist</button>
                                     )}
                                     <button type="button" onClick={onDeleteTrack}
                                         name={track_id}>Delete Track</button>
@@ -398,11 +398,11 @@ export function Album({ album }) {
             })()}
             <div onClick={(e) => { e.stopPropagation() }}
                 className="bg-neutral-700 br-100" style={{ padding: '1.25em' }}>
-                <h4>Album Tracks</h4>
+                <h4>Playlist Tracks</h4>
                 <div style={{ maxHeight: '100px', overflowY: 'scroll' }}>
                     {Array.isArray(album_tracks) && album_tracks.length > 0 ? (<>
                         {album_tracks?.map(track => {
-                            return <AlbumTrack key={track.track_id} track={track} />
+                            return <PlaylistTrack key={track.track_id} track={track} />
                         })}
                     </>)
                         : <p>None</p>}
@@ -411,9 +411,9 @@ export function Album({ album }) {
         </div >
         <div className="flex bg-neutral-800" style={{ flexWrap: 'wrap' }}>
             <div className="bg-neutral-800" style={{ padding: '2em', flexBasis: '30%', cursor: 'pointer' }}
-                onClick={amICreator ? (isDeleted ? onRestoreAlbum : showPopup) : undefined}> {/*TODO: replace "undefined" with an HD popup of album cover*/}
+                onClick={amICreator ? (isDeleted ? onRestorePlaylist : showPopup) : undefined}> {/*TODO: replace "undefined" with an HD popup of playlist cover*/}
                 <p>{isDeleted ? 'Deleted' : ''}</p>
-                {hasAlbumCover && <img src={signedUrls[0].signedUrl} alt={`album cover`}></img>}
+                {hasPlaylistCover && <img src={signedUrls[0].signedUrl} alt={`playlist cover`}></img>}
                 <p className="fs-s">{album_name}</p>
                 <p className="fs-xs">{
                     album_creators?.map(creator => `${creator.first_name} ${creator.last_name}`).join(', ')
@@ -422,14 +422,14 @@ export function Album({ album }) {
             {Array.isArray(album_tracks) && (
                 <div style={{ flexBasis: '70%', padding: '1em' }}>
                     {album_tracks.map(track =>
-                        <AlbumTrack key={track.track_id} track={track} />)}
+                        <PlaylistTrack key={track.track_id} track={track} />)}
                 </div>
             )}
             {!amICreator && (
                 !is_purchased_by_user ? (
-                <button type="button" onClick={onPurchaseAlbum}>Purchase Album</button>
+                <button type="button" onClick={onPurchasePlaylist}>Purchase Playlist</button>
                 ) : (
-                <button type="button" onClick={onUnPurchaseAlbum}>Un-purchase Album</button>
+                <button type="button" onClick={onUnPurchasePlaylist}>Un-purchase Playlist</button>
                 )
                 )
             }

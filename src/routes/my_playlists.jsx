@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import { useLoaderData, useRevalidator } from 'react-router-dom';
-import { Album } from '~/components/album';
+import { Playlist } from '~/components/playlist';
 import Navbar from '~/components/navbar';
 import { supabase } from '~/global';
-import { fetchSignedAlbumUrls } from '~/loaders/fetchSignedAlbumUrls';
-import { createAlbum } from '~/queries/albums';
+import { fetchSignedPlaylistUrls } from '~/loaders/fetchSignedPlaylistUrls';
+import { createPlaylist } from '~/queries/playlists';
 
 export { default as ErrorBoundary } from 'Routes/error';
 
@@ -18,57 +18,57 @@ export const loader = async () => {
     }
 
 
-    const { data: my_albums, error } = await supabase.from('my_albums').select().limit(30);
+    const { data: my_playlists, error } = await supabase.from('my_albums').select().limit(30);
     if (error) {
         throw error;
     }
 
-    const { albumCovers, trackFiles } = await fetchSignedAlbumUrls(my_albums);
-    for (const album of my_albums) {
-        album.signedUrls = albumCovers.get(album.album_id);
-        if (Array.isArray(album.album_tracks)) {
-            for (const track of album.album_tracks) {
+    const { playlistCovers, trackFiles } = await fetchSignedPlaylistUrls(my_playlists);
+    for (const playlist of my_playlists) {
+        playlist.signedUrls = playlistCovers.get(playlist.playlist_id);
+        if (Array.isArray(playlist.album_tracks)) {
+            for (const track of playlist.album_tracks) {
                 track.signedUrl = trackFiles.get(track.track_id);
             }
         }
     }
-    return { my_albums, my_profile };
+    return { my_playlists, my_profile };
 };
 
-export const Component = function MyAlbums() {
-    const { my_albums, my_profile } = useLoaderData();
+export const Component = function MyPlaylists() {
+    const { my_playlists, my_profile } = useLoaderData();
     const revalidator = useRevalidator();
-    const albumNameRef = useRef(null);
+    const playlistNameRef = useRef(null);
     const [isAddPopupVisible, setIsAddPopupVisible] = useState(false);
     const showPopup = () => setIsAddPopupVisible(true);
     const hidePopup = () => setIsAddPopupVisible(false);
-    const onCreateAlbum = (e) => {
+    const onCreatePlaylist = (e) => {
         e.preventDefault();
-        const album_name = albumNameRef.current.value;
-        createAlbum(album_name).then(() => {
+        const playlist_name = playlistNameRef.current.value;
+        createPlaylist(playlist_name).then(() => {
             hidePopup();
             revalidator.revalidate();
-            albumNameRef.current.value = '';
+            playlistNameRef.current.value = '';
         });
     }
     return (<>
         <Navbar />
         <div className={`absolute-fill flex-center bg-neutral-800 ${isAddPopupVisible ? '' : 'hidden'}`} style={{ zIndex: 999, opacity: .8 }}>
-            <form onSubmit={onCreateAlbum}>
+            <form onSubmit={onCreatePlaylist}>
                 <button onClick={hidePopup} style={{ float: 'right' }} type='button'>Cancel</button>
-                <h4>New Album</h4>
+                <h4>New Playlist</h4>
                 <div>
-                    <input type="text" placeholder='album name...' ref={albumNameRef} required></input>
+                    <input type="text" placeholder='playlist name...' ref={playlistNameRef} required></input>
                 </div>
                 <button type='submit'>Create</button>
             </form>
         </div>
-        <h1>My Albums</h1>
-        <button onClick={showPopup}>Add Album</button>
+        <h1>My Playlists</h1>
+        <button onClick={showPopup}>Add Playlist</button>
         {
-            Array.isArray(my_albums) &&
+            Array.isArray(my_playlists) &&
             <div>{
-                my_albums.map(album => <Album album={album} key={album.album_id} />)
+                my_playlists.map(playlist => <Playlist playlist={playlist} key={playlist.album_id} />)
             }</div>
         }
     </>)
