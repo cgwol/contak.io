@@ -54,6 +54,7 @@ function NavOptions() {
     return ( //guest toolbar
         <div className="banner-right">
             <Link to={`/musicGenerator`} style={{ marginRight: '1em' }}>Music Generator</Link>
+            <Link to={'/authenticate'}>Log In</Link>
         </div>
     );
 }
@@ -66,7 +67,6 @@ export default function Navbar() {
             <div className="flex absolute-fill" style={{ zIndex: 999 }}>
                 <div className="banner-left">
                     <Link to={'/'}><img src={contakLogo} alt="Contak" style={{ height: '42px', maxHeight: '3rem' }} /></Link>
-                    <Link to={'/authenticate'}>Authenticate</Link>
                 </div>
                 <NavOptions />
             </div>
