@@ -33,16 +33,39 @@ export const loader = async () => {
 
 export const Component = function MyPurchasedAlbums() {
     const { my_purchased_albums, my_profile } = useLoaderData();
-    return (<>
-        <Navbar />
-        <h1>My Purchased Albums</h1>
-        {
-            Array.isArray(my_purchased_albums) && my_purchased_albums.length > 0 ? (
-            <div>{
-                my_purchased_albums.map(album => <Album album={album} key={album.album_id} />)
-            }</div>) : (
-                <div>Nothing!</div>
-            )
-        }
-    </>)
-}
+
+    // Step 1: Add state for search query
+    const [searchQuery, setSearchQuery] = useState('');
+
+    return (
+        <>
+            <Navbar />
+            <h1>My Purchased Albums</h1>
+
+            {/* Step 2: Create an input element for search */}
+            <input
+                type="text"
+                placeholder="Search albums..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
+
+            {
+                Array.isArray(my_purchased_albums) && my_purchased_albums.length > 0 ? (
+                    <div>
+                        {
+                            // Step 3: Filter albums based on search query
+                            my_purchased_albums
+                                .filter((album) =>
+                                    album.album_title.toLowerCase().includes(searchQuery.toLowerCase())
+                                )
+                                .map((album) => <Album album={album} key={album.album_id} />)
+                        }
+                    </div>
+                ) : (
+                    <div>Nothing!</div>
+                )
+            }
+        </>
+    );
+};

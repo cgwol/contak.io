@@ -40,8 +40,11 @@ export const Component = function MyAlbums() {
     const revalidator = useRevalidator();
     const albumNameRef = useRef(null);
     const [isAddPopupVisible, setIsAddPopupVisible] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(''); // Step 1: Add state for search query
+
     const showPopup = () => setIsAddPopupVisible(true);
     const hidePopup = () => setIsAddPopupVisible(false);
+
     const onCreateAlbum = (e) => {
         e.preventDefault();
         const album_name = albumNameRef.current.value;
@@ -51,25 +54,45 @@ export const Component = function MyAlbums() {
             albumNameRef.current.value = '';
         });
     }
-    return (<>
-        <Navbar />
-        <div className={`absolute-fill flex-center bg-neutral-800 ${isAddPopupVisible ? '' : 'hidden'}`} style={{ zIndex: 999, opacity: .8 }}>
-            <form onSubmit={onCreateAlbum}>
-                <button onClick={hidePopup} style={{ float: 'right' }} type='button'>Cancel</button>
-                <h4>New Album</h4>
-                <div>
-                    <input type="text" placeholder='album name...' ref={albumNameRef} required></input>
-                </div>
-                <button type='submit'>Create</button>
-            </form>
-        </div>
-        <h1>My Albums</h1>
-        <button onClick={showPopup}>Add Album</button>
-        {
-            Array.isArray(my_albums) &&
-            <div>{
-                my_albums.map(album => <Album album={album} key={album.album_id} />)
-            }</div>
-        }
-    </>)
+
+    return (
+        <>
+            <Navbar />
+            <div className={`absolute-fill flex-center bg-neutral-800 ${isAddPopupVisible ? '' : 'hidden'}`} style={{ zIndex: 999, opacity: .8 }}>
+                <form onSubmit={onCreateAlbum}>
+                    <button onClick={hidePopup} style={{ float: 'right' }} type='button'>Cancel</button>
+                    <h4>New Album</h4>
+                    <div>
+                        <input type="text" placeholder='album name...' ref={albumNameRef} required></input>
+                    </div>
+                    <button type='submit'>Create</button>
+                </form>
+            </div>
+            <h1>My Albums</h1>
+            
+            {/* Step 2: Create an input element for search */}
+            <input
+                type="text"
+                placeholder="Search albums..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
+
+            <button onClick={showPopup}>Add Album</button>
+            {
+                Array.isArray(my_albums) && (
+                    <div>
+                        {
+                            // Step 3: Filter albums based on search query
+                            my_albums
+                                .filter((album) =>
+                                    album.album_name.toLowerCase().includes(searchQuery.toLowerCase())
+                                )
+                                .map((album) => <Album album={album} key={album.album_id} />)
+                        }
+                    </div>
+                )
+            }
+        </>
+    );
 }
