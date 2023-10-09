@@ -36,15 +36,15 @@ function NavOptions() {
                 <div className="dropdown">
                     <button className="basic-btn">Explore</button>
                     <div className="dropdown-content">
-                        <Link to={`/albums`}>Public Albums</Link>
+                        <Link to={`/albums`}>Public PlayLists</Link>
                     </div>
                 </div>
                 <div className="dropdown">
                     <button className="basic-btn">Dashboard</button>
                     <div className="dropdown-content">
                         <Link to={`/musicCreator`}>Profile</Link>
-                        <Link to={`/my_albums`}>My Albums</Link>
-                        <Link to={`/my_purchased_albums`}>Purchased Albums</Link>
+                        <Link to={`/my_albums`}>My Albums/PlayList</Link>
+                        <Link to={`/my_purchased_albums`}>Purchased Albums/PlayList</Link>
                         <Link to={`/musicCreatorPurchases`}>Stats</Link>
                     </div>
                 </div>
