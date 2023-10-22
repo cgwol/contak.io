@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '~/global';
 import { useSession } from '~/hooks/useSession';
+import contakLogo from 'Images/Contak_logotype.png';
 
 //TODO: make prettier
 export default function Authenticate() {
@@ -17,9 +18,14 @@ export default function Authenticate() {
     }, [session]);
 
     return (<>
-        <div className='absolute-fill flex-center'>
+        <div className='absolute-fill flex-column flex-center'>
+            <img src={contakLogo} alt="Contak" style={{ maxHeight: '103px', maxWidth: '80vw', marginBottom: '1em'}} />
             <div className='bg-neutral-100 br-100' style={{ padding: '1em', minWidth: '30%' }}>
-                <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />
+                <Auth 
+                    supabaseClient={supabase} 
+                    appearance={{ theme: ThemeSupa }} 
+                    providers={[]}
+                />
             </div>
         </div>
     </>)

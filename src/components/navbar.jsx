@@ -36,15 +36,15 @@ function NavOptions() {
                 <div className="dropdown">
                     <button className="basic-btn">Explore</button>
                     <div className="dropdown-content">
-                        <Link to={`/albums`}>Public Albums</Link>
+                        <Link to={`/playlists`}>Public Playlists</Link>
                     </div>
                 </div>
                 <div className="dropdown">
                     <button className="basic-btn">Dashboard</button>
                     <div className="dropdown-content">
                         <Link to={`/musicCreator`}>Profile</Link>
-                        <Link to={`/my_albums`}>My Albums</Link>
-                        <Link to={`/my_purchased_albums`}>Purchased Albums</Link>
+                        <Link to={`/my_playlists`}>My Playlists</Link>
+                        <Link to={`/my_purchased_playlists`}>Purchased Playlists</Link>
                         <Link to={`/musicCreatorPurchases`}>Stats</Link>
                     </div>
                 </div>
@@ -54,6 +54,7 @@ function NavOptions() {
     return ( //guest toolbar
         <div className="banner-right">
             <Link to={`/musicGenerator`} style={{ marginRight: '1em' }}>Music Generator</Link>
+            <Link to={'/authenticate'}>Log In</Link>
         </div>
     );
 }
@@ -66,7 +67,6 @@ export default function Navbar() {
             <div className="flex absolute-fill" style={{ zIndex: 999 }}>
                 <div className="banner-left">
                     <Link to={'/'}><img src={contakLogo} alt="Contak" style={{ height: '42px', maxHeight: '3rem' }} /></Link>
-                    <Link to={'/authenticate'}>Authenticate</Link>
                 </div>
                 <NavOptions />
             </div>

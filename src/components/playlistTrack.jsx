@@ -3,7 +3,7 @@ import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAudio } from "~/hooks/useAudio";
 
-export const AlbumTrack = ({ track }) => {
+export const PlaylistTrack = ({ track }) => {
     const { track_name, track_creators, signedUrl } = track;
     const { audio, isPlaying } = useAudio(signedUrl, {});
     // const { audio, isPlaying } = useRefreshableAudio(audio_files[0], {});

@@ -41,16 +41,16 @@ const router = createHashRouter([
         loader: ({ params }) => params,
       },
       {
-        path: "albums",
-        lazy: () => import('Routes/albums'),
+        path: "playlists",
+        lazy: () => import('~/routes/playlists'),
       },
       {
-        path: "my_albums",
-        lazy: () => import('Routes/my_albums'),
+        path: "my_playlists",
+        lazy: () => import('~/routes/my_playlists'),
       },
       {
-        path: "my_purchased_albums",
-        lazy: () => import('Routes/my_purchased_albums'),
+        path: "my_purchased_playlists",
+        lazy: () => import('~/routes/my_purchased_playlists'),
       },
       {
         path: "musicGenerator",

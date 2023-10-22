@@ -118,7 +118,7 @@
         {
             "name": "Launch Debug All",
             "configurations": [
-                "Start Node Dev",
+                "Start Node Dev (Default Browser)",
                 "Python Debug: Listen"
             ],
             "stopAll": true
