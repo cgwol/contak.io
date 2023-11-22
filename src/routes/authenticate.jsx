@@ -13,7 +13,7 @@ export default function Authenticate() {
 
     useEffect(() => {
         if (session && !loading) {
-            navigate('/albums');
+            navigate('/playlists');
         }
     }, [session]);
 

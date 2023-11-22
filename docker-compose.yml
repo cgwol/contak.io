@@ -14,11 +14,6 @@ services:
     # Musicgen requires at least 1 GPU
     # NOTE: GPU in Docker requires NVIDIA Container Toolkit to be installed on host
     # Install instructions: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [ gpu ]
     environment:
       - NVIDIA_DRIVER_CAPABILITIES=all
       - NVIDIA_VISIBLE_DEVICES=all
