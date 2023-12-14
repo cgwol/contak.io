@@ -1,3 +1,6 @@
+### This is video which explains what does the Project is meant to do ####
+https://www.youtube.com/watch?v=QxwC9-_CMa4
+
 # Getting Started with Contak
 
 ## 1. Install PostgreSQL
@@ -88,3 +91,6 @@ Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ***DOES NOT WORK CURRENTLY***
+
+
+
